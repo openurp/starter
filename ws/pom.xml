@@ -17,12 +17,21 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.openurp.base</groupId>
+      <artifactId>openurp-base-api</artifactId>
+      <version>${openurp.api.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.beangle.ems</groupId>
       <artifactId>beangle-ems-app_2.13</artifactId>
     </dependency>
     <dependency>
       <groupId>org.beangle.commons</groupId>
       <artifactId>beangle-commons-web_2.13</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.beangle.webmvc</groupId>
+      <artifactId>beangle-webmvc-entity-plugin_2.13</artifactId>
     </dependency>
     <dependency>
       <groupId>org.beangle.webmvc</groupId>
