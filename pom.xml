@@ -18,7 +18,7 @@
   </modules>
 
   <properties>
-    <openurp.api.version>0.21.0</openurp.api.version>
+    <openurp.api.version>0.22.0</openurp.api.version>
   </properties>
 
 </project>
