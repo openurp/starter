@@ -4,11 +4,11 @@
   <parent>
     <groupId>org.openurp</groupId>
     <artifactId>openurp-parent</artifactId>
-    <version>0.4.8</version>
+    <version>0.4.10</version>
   </parent>
   <groupId>org.openurp.boot</groupId>
   <artifactId>openurp-boot-parent</artifactId>
-  <version>0.0.4</version>
+  <version>0.0.5</version>
   <packaging>pom</packaging>
   <name>OpenURP Boot Parent</name>
 
@@ -18,7 +18,7 @@
   </modules>
 
   <properties>
-    <openurp.api.version>0.22.0</openurp.api.version>
+    <openurp.api.version>0.22.1</openurp.api.version>
   </properties>
 
 </project>
