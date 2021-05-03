@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <cdi>
   <container>
-    <module class="org.openurp.boot.service.DaoModule" />
+    <module class="org.openurp.starter.service.DaoModule" />
     <module class="org.beangle.ems.app.cas.DefaultModule" />
   </container>
 </cdi>

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.boot.edu.web.action
+package org.openurp.starter.edu.action
 
 import org.beangle.ems.app.web.NavContext
 import org.beangle.security.realm.cas.{Cas, CasConfig}

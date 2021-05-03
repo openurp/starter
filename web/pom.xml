@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
   <parent>
-    <groupId>org.openurp.boot</groupId>
-    <artifactId>openurp-boot-parent</artifactId>
+    <groupId>org.openurp.starter</groupId>
+    <artifactId>openurp-starter-parent</artifactId>
     <version>0.0.6-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>openurp-boot-web</artifactId>
+  <artifactId>openurp-starter-web</artifactId>
   <packaging>jar</packaging>
-  <name>Openurp Boot Web</name>
+  <name>Openurp Starter Web</name>
 
   <properties>
-    <bundle.symbolicName>org.openurp.boot.web</bundle.symbolicName>
-    <bundle.namespace>org.openurp.boot</bundle.namespace>
+    <bundle.symbolicName>org.openurp.starter.web</bundle.symbolicName>
+    <bundle.namespace>org.openurp.starter</bundle.namespace>
   </properties>
 
   <dependencies>

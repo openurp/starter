@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.boot.service
+package org.openurp.starter.service
 
 import org.beangle.cache.concurrent.ConcurrentMapCacheManager
 import org.beangle.cdi.bind.BindModule
