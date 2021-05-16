@@ -18,15 +18,12 @@
  */
 package org.openurp.starter.web
 
-import jakarta.servlet.ServletContext
-import org.beangle.commons.text.inflector.en.EnNounPluralizer
+import org.beangle.cdi.bind.ReconfigModule
 import org.beangle.ems.app.{Ems, EmsApp}
 
-class Initializer extends org.beangle.commons.web.init.Initializer {
-
-  override def onConfig(sc: ServletContext): Unit = {
-    System.setProperty("beangle.cdi.reconfig_url",s"${Ems.api}/platform/config/reconfigs/${EmsApp.name}")
+class WebReconfigModule extends ReconfigModule {
+  override protected def config(): Unit = {
+    update("mvc.FreemarkerConfigurer.default")
+      .set("templatePath", s"${Ems.api}/platform/config/templates/${EmsApp.name}/{path},class://")
   }
-
-  override def onStartup(sc: ServletContext): Unit = {}
 }

@@ -63,7 +63,7 @@ object DaoModule extends BindModule {
         "batch*=PROPAGATION_REQUIRED", "execute*=PROPAGATION_REQUIRED", "remove*=PROPAGATION_REQUIRED",
         "*=PROPAGATION_REQUIRED,readOnly")).primary()
 
-    bind(classOf[DomainFactory])
+    bind(classOf[DomainFactory]).constructor(list(ref("SessionFactory.default")))
 
     bind("EntityDao.hibernate", classOf[TransactionProxyFactoryBean]).proxy("target", classOf[HibernateEntityDao])
       .parent("TransactionProxy.template").primary().description("基于Hibernate提供的通用DAO")

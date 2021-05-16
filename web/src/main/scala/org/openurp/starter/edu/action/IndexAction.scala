@@ -19,7 +19,9 @@
 package org.openurp.starter.edu.action
 
 import org.beangle.ems.app.web.NavContext
+import org.beangle.security.Securities
 import org.beangle.security.realm.cas.{Cas, CasConfig}
+import org.beangle.security.session.cache.CacheSessionRepo
 import org.beangle.webmvc.api.action.{ActionSupport, ServletSupport}
 import org.beangle.webmvc.api.annotation.action
 import org.beangle.webmvc.api.context.ActionContext
@@ -34,6 +36,7 @@ import org.openurp.base.edu.model.Project
 class IndexAction extends ActionSupport with EntityAction[Project] with ServletSupport {
 
   var casConfig: CasConfig = _
+  var sessionRepo: CacheSessionRepo = _
 
   def index(): View = {
     put("nav", NavContext.get(request))
@@ -41,6 +44,9 @@ class IndexAction extends ActionSupport with EntityAction[Project] with ServletS
   }
 
   def logout(): View = {
+    Securities.session foreach { s =>
+      sessionRepo.evict(s.id)
+    }
     redirect(to(Cas.cleanup(casConfig, ActionContext.current.request, ActionContext.current.response)), null)
   }
 }

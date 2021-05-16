@@ -4,4 +4,7 @@
     <module class="org.openurp.starter.service.DaoModule" />
     <module class="org.beangle.ems.app.cas.DefaultModule" />
   </container>
+  <container name="web">
+    <module class="org.openurp.starter.web.WebReconfigModule"/>
+  </container>
 </cdi>
