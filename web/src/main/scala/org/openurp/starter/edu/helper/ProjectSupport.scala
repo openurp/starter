@@ -16,9 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.boot.edu.helper
-
-import java.time.LocalDate
+package org.openurp.starter.edu.helper
 
 import org.beangle.commons.lang.Strings
 import org.beangle.data.dao.OqlBuilder
@@ -31,6 +29,8 @@ import org.beangle.webmvc.entity.action.EntityAction
 import org.openurp.base.edu.model.{Project, Semester}
 import org.openurp.base.model.Department
 import org.openurp.code.Code
+
+import java.time.LocalDate
 
 trait ProjectSupport extends ServletSupport {
   this: EntityAction[_] =>

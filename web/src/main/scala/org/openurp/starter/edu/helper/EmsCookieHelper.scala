@@ -16,11 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.boot.edu.helper
+package org.openurp.starter.edu.helper
 
 import jakarta.servlet.http.{HttpServletRequest, HttpServletResponse}
-import java.time.LocalDate
-
 import org.beangle.commons.lang.Numbers
 import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.ems.app.web.EmsCookie
@@ -28,6 +26,8 @@ import org.beangle.security.Securities
 import org.beangle.security.authc.{DefaultAccount, Profile}
 import org.openurp.base.edu.model.Project
 import org.openurp.base.model.School
+
+import java.time.LocalDate
 
 class EmsCookieHelper(entityDao: EntityDao) {
 
@@ -40,7 +40,7 @@ class EmsCookieHelper(entityDao: EntityDao) {
           case Some(s) =>
             val account = s.principal.asInstanceOf[DefaultAccount]
             var profile: Profile = null
-            if (account.profiles.length > 0) {
+            if (null != account.profiles && account.profiles.length > 0) {
               if (cookie.profile == 0L) {
                 profile = account.profiles(0)
               } else {

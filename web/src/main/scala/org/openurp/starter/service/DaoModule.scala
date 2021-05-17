@@ -16,14 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.openurp.boot.ws
+package org.openurp.starter.service
 
 import org.beangle.cache.concurrent.ConcurrentMapCacheManager
 import org.beangle.cdi.bind.BindModule
 import org.beangle.commons.lang.ClassLoaders
-import org.beangle.data.hibernate.{DomainFactory, HibernateEntityDao}
-import org.beangle.data.hibernate.spring.{HibernateTransactionManager, LocalSessionFactoryBean}
 import org.beangle.data.hibernate.spring.web.OpenSessionInViewInterceptor
+import org.beangle.data.hibernate.spring.{HibernateTransactionManager, LocalSessionFactoryBean}
+import org.beangle.data.hibernate.{DomainFactory, HibernateEntityDao}
 import org.beangle.ems.app.datasource.AppDataSourceFactory
 import org.springframework.beans.factory.config.PropertiesFactoryBean
 import org.springframework.transaction.interceptor.TransactionProxyFactoryBean
@@ -40,7 +40,7 @@ object DaoModule extends BindModule {
       "properties",
       props(
         "hibernate.max_fetch_depth=1", "hibernate.default_batch_fetch_size=500",
-        "hibernate.jdbc.fetch_size=500", "hibernate.jdbc.batch_size=20",
+        "hibernate.jdbc.fetch_size=8", "hibernate.jdbc.batch_size=20",
         "hibernate.jdbc.batch_versioned_data=true", "hibernate.jdbc.use_streams_for_binary=true",
         "hibernate.jdbc.use_get_generated_keys=true",
         "hibernate.javax.cache.missing_cache_strategy=create",
@@ -63,7 +63,7 @@ object DaoModule extends BindModule {
         "batch*=PROPAGATION_REQUIRED", "execute*=PROPAGATION_REQUIRED", "remove*=PROPAGATION_REQUIRED",
         "*=PROPAGATION_REQUIRED,readOnly")).primary()
 
-    bind(classOf[DomainFactory])
+    bind(classOf[DomainFactory]).constructor(list(ref("SessionFactory.default")))
 
     bind("EntityDao.hibernate", classOf[TransactionProxyFactoryBean]).proxy("target", classOf[HibernateEntityDao])
       .parent("TransactionProxy.template").primary().description("基于Hibernate提供的通用DAO")

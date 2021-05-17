@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <mvc>
-  <profile name="openurp-boot-edu" package="org.openurp.boot.edu.web.action">
+  <profile name="openurp-starter-edu" package="org.openurp.starter.edu.action">
     <url path="/" suffix=""  style="seo" />
     <interceptors>
       <interceptor name="web.Interceptor.hibernate"/>
