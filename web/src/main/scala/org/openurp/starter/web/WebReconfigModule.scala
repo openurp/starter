@@ -24,6 +24,6 @@ import org.beangle.ems.app.{Ems, EmsApp}
 class WebReconfigModule extends ReconfigModule {
   override protected def config(): Unit = {
     update("mvc.FreemarkerConfigurer.default")
-      .set("templatePath", s"${Ems.api}/platform/config/templates/${EmsApp.name}/{path},class://")
+      .set("templatePath", s"${Ems.api}/platform/config/files/${EmsApp.name}/{path},class://")
   }
 }
