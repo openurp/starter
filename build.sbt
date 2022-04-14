@@ -2,7 +2,7 @@ import org.openurp.parent.Settings._
 import org.openurp.parent.Dependencies._
 
 ThisBuild / organization := "org.openurp.starter"
-ThisBuild / version := "0.0.17-SNAPSHOT"
+ThisBuild / version := "0.0.17"
 
 ThisBuild / scmInfo := Some(
   ScmInfo(
@@ -35,7 +35,7 @@ lazy val web = (project in file("web"))
     name := "openurp-starter-web",
     common,
     libraryDependencies ++= Seq(beangle_commons_core,beangle_ems_app,beangle_webmvc_bootstrap,beangle_webmvc_support,beangle_data_transfer),
-    libraryDependencies ++= Seq(openurp_base_api,beangle_data_orm,hibernate_jcache,ehcache,beangle_cdi_api),
+    libraryDependencies ++= Seq(openurp_base_api,beangle_data_orm,hibernate_core,hibernate_jcache,ehcache,beangle_cdi_api),
     libraryDependencies ++= Seq(beangle_webmvc_freemarker,logback_classic)
   )
 
@@ -44,7 +44,7 @@ lazy val ws = (project in file("ws"))
     name := "openurp-starter-ws",
     common,
     libraryDependencies ++= Seq(beangle_ems_app,beangle_webmvc_support,beangle_serializer_text,beangle_data_transfer),
-    libraryDependencies ++= Seq(openurp_base_api,beangle_data_orm,hibernate_jcache,ehcache,beangle_cdi_api),
+    libraryDependencies ++= Seq(openurp_base_api,beangle_data_orm,hibernate_core,hibernate_jcache,ehcache,beangle_cdi_api),
     libraryDependencies ++= Seq(logback_classic)
   )
 
