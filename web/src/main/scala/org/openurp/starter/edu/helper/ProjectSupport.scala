@@ -18,21 +18,21 @@
 package org.openurp.starter.edu.helper
 
 import org.beangle.commons.lang.Strings
-import org.beangle.data.dao.OqlBuilder
+import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.data.model.Entity
 import org.beangle.security.Securities
 import org.beangle.security.authc.Profile
-import org.beangle.web.action.support.ServletSupport
 import org.beangle.web.action.annotation.ignore
-import org.beangle.webmvc.support.action.EntityAction
+import org.beangle.web.action.support.{ParamSupport, ServletSupport}
 import org.openurp.base.edu.model.{Project, Semester}
 import org.openurp.base.model.Department
 import org.openurp.code.Code
 
 import java.time.LocalDate
 
-trait ProjectSupport extends ServletSupport {
-  this: EntityAction[_] =>
+trait ProjectSupport extends ParamSupport with ServletSupport {
+
+  def entityDao: EntityDao
 
   def getCodes[T](clazz: Class[T]): Seq[T] = {
     val query = OqlBuilder.from(clazz, "c")
