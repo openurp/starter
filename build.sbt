@@ -23,7 +23,7 @@ ThisBuild / developers := List(
 ThisBuild / description := "OpenURP Starter"
 ThisBuild / homepage := Some(url("http://openurp.github.io/starter/index.html"))
 
-val apiVersion="0.24.1"
+val apiVersion="0.25.0"
 val openurp_base_api ="org.openurp.base" % "openurp-base-api" %apiVersion
 
 lazy val root = (project in file("."))
@@ -35,7 +35,7 @@ lazy val web = (project in file("web"))
     name := "openurp-starter-web",
     common,
     libraryDependencies ++= Seq(beangle_commons_core,beangle_ems_app,beangle_webmvc_bootstrap,beangle_webmvc_support,beangle_data_transfer),
-    libraryDependencies ++= Seq(openurp_base_api,beangle_data_orm,hibernate_core,hibernate_jcache,ehcache,beangle_cdi_api),
+    libraryDependencies ++= Seq(openurp_base_api,beangle_data_orm,hibernate_core,hibernate_jcache,ehcache,beangle_cdi_api,beangle_cdi_spring),
     libraryDependencies ++= Seq(beangle_webmvc_freemarker,logback_classic)
   )
 
@@ -45,7 +45,7 @@ lazy val ws = (project in file("ws"))
     common,
     libraryDependencies ++= Seq(beangle_ems_app,beangle_webmvc_support,beangle_serializer_text,beangle_data_transfer),
     libraryDependencies ++= Seq(openurp_base_api,beangle_data_orm,hibernate_core,hibernate_jcache,ehcache,beangle_cdi_api),
-    libraryDependencies ++= Seq(logback_classic)
+    libraryDependencies ++= Seq(beangle_cdi_spring,logback_classic)
   )
 
 publish / skip := true
