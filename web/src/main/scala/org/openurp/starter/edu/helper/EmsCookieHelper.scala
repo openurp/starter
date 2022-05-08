@@ -23,8 +23,7 @@ import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.ems.app.web.EmsCookie
 import org.beangle.security.Securities
 import org.beangle.security.authc.{DefaultAccount, Profile}
-import org.openurp.base.edu.model.Project
-import org.openurp.base.model.School
+import org.openurp.base.model.{Project, School}
 
 import java.time.LocalDate
 
@@ -69,6 +68,19 @@ class EmsCookieHelper(entityDao: EntityDao) {
           case None => null
         }
     }
+  }
+
+  private def findSchoolByServerName(request: HttpServletRequest): Option[School] = {
+    val builder = OqlBuilder.from(classOf[School], "p").where("p.code =:pcode", request.getServerName)
+      .cacheable()
+    entityDao.search(builder).headOption
+  }
+
+  private def getFirstSchool(): School = {
+    val query = OqlBuilder.from(classOf[School], "p")
+    query.where("p.endOn is null or p.endOn > :today", LocalDate.now)
+    query.orderBy("p.code").cacheable()
+    entityDao.search(query).head
   }
 
   def getProject(req: HttpServletRequest, res: HttpServletResponse): Project = {
@@ -117,21 +129,8 @@ class EmsCookieHelper(entityDao: EntityDao) {
     }
   }
 
-  private def findSchoolByServerName(request: HttpServletRequest): Option[School] = {
-    val builder = OqlBuilder.from(classOf[School], "p").where("p.code =:pcode", request.getServerName)
-      .cacheable()
-    entityDao.search(builder).headOption
-  }
-
   private def getFirstProject(): Project = {
     val query = OqlBuilder.from(classOf[Project], "p")
-    query.where("p.endOn is null or p.endOn > :today", LocalDate.now)
-    query.orderBy("p.code").cacheable()
-    entityDao.search(query).head
-  }
-
-  private def getFirstSchool(): School = {
-    val query = OqlBuilder.from(classOf[School], "p")
     query.where("p.endOn is null or p.endOn > :today", LocalDate.now)
     query.orderBy("p.code").cacheable()
     entityDao.search(query).head

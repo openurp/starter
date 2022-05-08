@@ -24,8 +24,7 @@ import org.beangle.security.Securities
 import org.beangle.security.authc.Profile
 import org.beangle.web.action.annotation.ignore
 import org.beangle.web.action.support.{ParamSupport, ServletSupport}
-import org.openurp.base.edu.model.{Project, Semester}
-import org.openurp.base.model.Department
+import org.openurp.base.model.{Department, Project, Semester}
 import org.openurp.code.Code
 
 import java.time.LocalDate
@@ -50,16 +49,16 @@ trait ProjectSupport extends ParamSupport with ServletSupport {
     entityDao.search(query)
   }
 
+  @ignore
+  final def getProject: Project = {
+    new EmsCookieHelper(entityDao).getProject(request, response)
+  }
+
   def findInProject[T <: Entity[_]](clazz: Class[T], orderBy: String = "code"): Seq[T] = {
     val query = OqlBuilder.from(clazz, "aa")
     query.where("aa.project=:project", getProject)
     query.orderBy(orderBy)
     entityDao.search(query)
-  }
-
-  @ignore
-  final def getProject: Project = {
-    new EmsCookieHelper(entityDao).getProject(request, response)
   }
 
   def addDepart(query: OqlBuilder[_], departPath: String): Unit = {
@@ -74,13 +73,6 @@ trait ProjectSupport extends ParamSupport with ServletSupport {
             query.where(departPath + ".id in(:profile_depart_ids)", departIds)
           }
         }
-    }
-  }
-
-  private def getProfileDepartIds: Option[String] = {
-    new EmsCookieHelper(entityDao).getProfile(request, response) match {
-      case None => None
-      case Some(p) => p.getProperty("department")
     }
   }
 
@@ -104,15 +96,23 @@ trait ProjectSupport extends ParamSupport with ServletSupport {
     }
   }
 
+  private def getProfileDepartIds: Option[String] = {
+    new EmsCookieHelper(entityDao).getProfile(request, response) match {
+      case None => None
+      case Some(p) => p.getProperty("department")
+    }
+  }
+
   def getCurrentSemester: Semester = {
+    val calendar = getProject.calendar
     val builder = OqlBuilder.from(classOf[Semester], "semester")
-      .where("semester.calendar in(:calendars)", getProject.calendars)
+      .where("semester.calendar =:calendar", calendar)
     builder.where(":date between semester.beginOn and  semester.endOn", LocalDate.now)
     builder.cacheable()
     val rs = entityDao.search(builder)
     if (rs.isEmpty) { //如果没有正在其中的学期，则查找一个距离最近的
       val builder2 = OqlBuilder.from(classOf[Semester], "semester")
-        .where("semester.calendar in(:calendars)", getProject.calendars)
+        .where("semester.calendar =:calendar", calendar)
       builder2.orderBy("abs(semester.beginOn - current_date() + semester.endOn - current_date())")
       builder2.cacheable()
       builder2.limit(1, 1)
