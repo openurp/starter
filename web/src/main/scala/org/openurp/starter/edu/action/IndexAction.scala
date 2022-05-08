@@ -26,7 +26,7 @@ import org.beangle.web.action.annotation.action
 import org.beangle.web.action.context.ActionContext
 import org.beangle.web.action.view.View
 import org.beangle.webmvc.support.action.EntityAction
-import org.openurp.base.edu.model.Project
+import org.openurp.base.model.Project
 
 /**
  * @author xinzhou
