@@ -18,10 +18,15 @@
 package org.openurp.starter.edu.action
 
 import org.beangle.cdi.bind.BindModule
+import org.openurp.base.service.impl.{ProjectPropertyServiceImpl, SemesterServiceImpl}
+import org.openurp.code.service.impl.CodeServiceImpl
 
 class ProjectModule extends BindModule {
 
   override def binding(): Unit = {
     bind(classOf[IndexAction])
+    bind(classOf[CodeServiceImpl])
+    bind(classOf[SemesterServiceImpl])
+    bind(classOf[ProjectPropertyServiceImpl])
   }
 }

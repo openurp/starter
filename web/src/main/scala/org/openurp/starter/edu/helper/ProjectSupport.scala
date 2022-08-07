@@ -25,7 +25,9 @@ import org.beangle.security.authc.Profile
 import org.beangle.web.action.annotation.ignore
 import org.beangle.web.action.support.{ParamSupport, ServletSupport}
 import org.openurp.base.model.{Department, Project, Semester}
+import org.openurp.base.service.ProjectPropertyService
 import org.openurp.code.Code
+import org.openurp.code.service.CodeService
 
 import java.time.LocalDate
 
@@ -33,18 +35,21 @@ trait ProjectSupport extends ParamSupport with ServletSupport {
 
   def entityDao: EntityDao
 
-  def getCodes[T](clazz: Class[T]): Seq[T] = {
-    val query = OqlBuilder.from(clazz, "c")
-    if (classOf[Code].isAssignableFrom(clazz)) {
-      query.where("c.endOn is null or :now between c.beginOn and c.endOn", LocalDate.now)
-    }
-    query.cacheable()
-    entityDao.search(query)
+  var codeService: CodeService = _
+
+  var projectPropertyService: ProjectPropertyService = _
+
+  def getProjectProperty[T](name: String, defaultValue: T)(using project: Project): T = {
+    projectPropertyService.get(project, name, defaultValue)
   }
 
-  def findInSchool[T <: Entity[_]](clazz: Class[T]): Seq[T] = {
+  def getCodes[T <: Code](clazz: Class[T])(using project: Project): collection.Seq[T] = {
+    codeService.get(clazz)
+  }
+
+  def findInSchool[T <: Entity[_]](clazz: Class[T])(using project: Project): Seq[T] = {
     val query = OqlBuilder.from(clazz, "aa")
-    query.where("aa.school=:school", getProject.school)
+    query.where("aa.school=:school", project.school)
     query.orderBy("code")
     entityDao.search(query)
   }
@@ -54,9 +59,9 @@ trait ProjectSupport extends ParamSupport with ServletSupport {
     new EmsCookieHelper(entityDao).getProject(request, response)
   }
 
-  def findInProject[T <: Entity[_]](clazz: Class[T], orderBy: String = "code"): Seq[T] = {
+  def findInProject[T <: Entity[_]](clazz: Class[T], orderBy: String = "code")(using project: Project): Seq[T] = {
     val query = OqlBuilder.from(clazz, "aa")
-    query.where("aa.project=:project", getProject)
+    query.where("aa.project=:project", project)
     query.orderBy(orderBy)
     entityDao.search(query)
   }
@@ -76,8 +81,7 @@ trait ProjectSupport extends ParamSupport with ServletSupport {
     }
   }
 
-  def getDeparts: List[Department] = {
-    val project = getProject
+  def getDeparts(using project: Project): List[Department] = {
     getProfileDepartIds match {
       case None => List.empty
       case Some(d) =>
@@ -103,8 +107,8 @@ trait ProjectSupport extends ParamSupport with ServletSupport {
     }
   }
 
-  def getCurrentSemester: Semester = {
-    val calendar = getProject.calendar
+  def getCurrentSemester(using project: Project): Semester = {
+    val calendar = project.calendar
     val builder = OqlBuilder.from(classOf[Semester], "semester")
       .where("semester.calendar =:calendar", calendar)
     builder.where(":date between semester.beginOn and  semester.endOn", LocalDate.now)
