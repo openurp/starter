@@ -1,8 +1,11 @@
 <?xml version="1.0"?>
 <cdi>
   <container>
+    <module class="org.beangle.ems.app.cas.DefaultModule"/>
+    <module class="org.beangle.ems.app.log.DefaultModule"/>
+    <module class="org.beangle.ems.app.web.DefaultModule"/>
     <module class="org.openurp.starter.service.DaoModule" />
-    <module class="org.beangle.ems.app.cas.DefaultModule" />
+    <module class="org.openurp.starter.service.ServiceModule" />
     <module class="org.openurp.starter.web.WebReconfigModule"/>
   </container>
 </cdi>

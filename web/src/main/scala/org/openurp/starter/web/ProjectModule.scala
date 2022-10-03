@@ -15,18 +15,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openurp.starter.edu.action
+package org.openurp.starter.web
 
 import org.beangle.cdi.bind.BindModule
-import org.openurp.base.service.impl.{ProjectPropertyServiceImpl, SemesterServiceImpl}
-import org.openurp.code.service.impl.CodeServiceImpl
+import org.openurp.starter.web.action.IndexAction
 
 class ProjectModule extends BindModule {
 
   override def binding(): Unit = {
     bind(classOf[IndexAction])
-    bind(classOf[CodeServiceImpl])
-    bind(classOf[SemesterServiceImpl])
-    bind(classOf[ProjectPropertyServiceImpl])
   }
 }

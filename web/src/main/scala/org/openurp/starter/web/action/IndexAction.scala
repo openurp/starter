@@ -15,15 +15,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.openurp.starter.edu.action
+package org.openurp.starter.web.action
 
+import org.beangle.ems.app.Ems
 import org.beangle.ems.app.web.NavContext
 import org.beangle.security.Securities
 import org.beangle.security.realm.cas.{Cas, CasConfig}
 import org.beangle.security.session.cache.CacheSessionRepo
-import org.beangle.web.action.support.{ActionSupport, ServletSupport}
 import org.beangle.web.action.annotation.action
 import org.beangle.web.action.context.ActionContext
+import org.beangle.web.action.support.{ActionSupport, ServletSupport}
 import org.beangle.web.action.view.View
 import org.beangle.webmvc.support.action.EntityAction
 import org.openurp.base.model.Project
@@ -39,6 +40,8 @@ class IndexAction extends ActionSupport with EntityAction[Project] with ServletS
 
   def index(): View = {
     put("nav", NavContext.get(request))
+    put("ems", Ems)
+    put("locale", ActionContext.current.locale)
     forward()
   }
 
