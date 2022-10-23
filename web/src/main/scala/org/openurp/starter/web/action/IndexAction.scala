@@ -33,7 +33,7 @@ import org.openurp.base.model.Project
  * @author xinzhou
  */
 @action("")
-class IndexAction extends ActionSupport with EntityAction[Project] with ServletSupport {
+class IndexAction extends ActionSupport, ServletSupport {
 
   var casConfig: CasConfig = _
   var sessionRepo: CacheSessionRepo = _

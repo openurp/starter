@@ -21,38 +21,43 @@ import org.beangle.data.dao.EntityDao
 import org.beangle.security.Securities
 import org.beangle.web.action.support.{ActionSupport, ServletSupport}
 import org.beangle.web.action.view.View
+import org.openurp.base.edu.model.Teacher
 import org.openurp.base.model.{Project, Semester}
 import org.openurp.base.service.SemesterService
 import org.openurp.base.std.model.Student
 
 import java.time.LocalDate
 
-trait StdProjectSupport extends ActionSupport with ServletSupport {
+trait TeacherSupport extends ActionSupport with ServletSupport {
 
   def entityDao: EntityDao
 
-  def semesterService:SemesterService
+  def semesterService: SemesterService
 
   def index(): View = {
-    val stds = entityDao.findBy(classOf[Student], "code" -> Securities.user)
-    if stds.isEmpty then forward("not-student")
-    else if stds.size == 1 then
-      toProject(stds.head)
-    else
-      getInt("projectId") match {
-        case None =>
-          val projects = stds.map(_.project)
-          put("projects", projects)
-          request.setAttribute("defaultProjectId", projects.head.id)
-          forward()
-        case Some(pid) =>
-          stds.find(_.project.id == pid) match
-            case Some(s) => toProject(s)
-            case None => forward()
+    val teacher = getTeacher()
+    if (null == teacher) {
+      forward("not-teacher")
+    } else {
+      if (teacher.projects.isEmpty) {
+        forward("empty-project")
+      } else if (teacher.projects.size == 1) {
+        toProject(teacher, teacher.projects.head)
+      } else {
+        getInt("projectId") match {
+          case None =>
+            request.setAttribute("defaultProjectId", teacher.projects.head.id)
+            forward()
+          case Some(pid) =>
+            teacher.projects.find(_.id == pid) match
+              case Some(p) => toProject(teacher, p)
+              case None => forward()
+        }
       }
+    }
   }
 
-  protected def projectIndex(student: Student): Unit
+  protected def projectIndex(teacher: Teacher, project: Project): Unit
 
   protected final def getSemester(): Semester = {
     getInt("semester.id") match {
@@ -74,21 +79,20 @@ trait StdProjectSupport extends ActionSupport with ServletSupport {
       }
   }
 
-  protected final def getStudent(): Student = {
-    val std = request.getAttribute("student")
-    if (null != std) std.asInstanceOf[Student]
-    else
-      val project = getProject()
-      val stds = entityDao.findBy(classOf[Student], "project" -> project, "code" -> Securities.user)
-      stds.foreach { std => request.setAttribute("std", std) }
-      stds.head
+  protected final def getTeacher(): Teacher = {
+    val teacher = request.getAttribute("teacher")
+    if (null != teacher) teacher.asInstanceOf[Teacher]
+    else {
+      val teachers = entityDao.findBy(classOf[Teacher], "staff.code" -> Securities.user)
+      teachers.foreach { t => request.setAttribute("teacher", t) }
+      teachers.headOption.orNull
+    }
   }
 
-  private def toProject(student: Student): View = {
-    request.setAttribute("student", student)
-    request.setAttribute("project", student.project)
-    projectIndex(student)
+  private def toProject(teacher: Teacher, p: Project): View = {
+    request.setAttribute("project", p)
+    request.setAttribute("teacher", teacher)
+    projectIndex(teacher, p)
     forward("projectIndex")
   }
-
 }

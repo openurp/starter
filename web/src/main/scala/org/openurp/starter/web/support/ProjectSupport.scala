@@ -129,7 +129,7 @@ trait ProjectSupport extends ParamSupport with ServletSupport {
     getInt("project.id") match {
       case None =>
         val builder = OqlBuilder.from(clazz, "s")
-        builder.where("s.user.code=:code", Securities.user)
+        builder.where("s.code=:code", Securities.user)
         val stds = entityDao.search(builder)
         if (stds.size == 1) {
           stds.head
@@ -138,7 +138,7 @@ trait ProjectSupport extends ParamSupport with ServletSupport {
         }
       case Some(projectId) =>
         val builder = OqlBuilder.from(clazz, "s")
-        builder.where("s.project.id=:projectId and s.user.code=:code", projectId, Securities.user)
+        builder.where("s.project.id=:projectId and s.code=:code", projectId, Securities.user)
         entityDao.search(builder).head
     }
   }
