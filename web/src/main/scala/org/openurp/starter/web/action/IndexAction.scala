@@ -17,8 +17,8 @@
 
 package org.openurp.starter.web.action
 
-import org.beangle.ems.app.Ems
 import org.beangle.ems.app.web.NavContext
+import org.beangle.ems.app.{Ems, EmsApp}
 import org.beangle.security.Securities
 import org.beangle.security.realm.cas.{Cas, CasConfig}
 import org.beangle.security.session.cache.CacheSessionRepo
@@ -43,6 +43,10 @@ class IndexAction extends ActionSupport, ServletSupport {
     put("ems", Ems)
     put("locale", ActionContext.current.locale)
     forward()
+  }
+
+  def notice(): View = {
+    redirect(to(Ems.portal + "/index/appNotice?app=" + EmsApp.name),"")
   }
 
   def logout(): View = {
