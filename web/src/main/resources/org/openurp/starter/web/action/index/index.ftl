@@ -1,4 +1,4 @@
 [@b.head/]
 [#include "/org/beangle/ems/app/nav.ftl"/]
-[@displayFrame/]
+[@displayFrame "!welcome"/]
 [@b.foot/]
