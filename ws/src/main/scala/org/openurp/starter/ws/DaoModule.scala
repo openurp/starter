@@ -22,7 +22,7 @@ import org.beangle.cdi.bind.BindModule
 import org.beangle.commons.lang.ClassLoaders
 import org.beangle.data.orm.hibernate.{DomainFactory, HibernateEntityDao}
 import org.beangle.data.orm.hibernate.spring.{HibernateTransactionManager, LocalSessionFactoryBean}
-import org.beangle.webmvc.support.hibernate.OpenSessionInViewInterceptor
+import org.beangle.webmvc.hibernate.OpenSessionInViewInterceptor
 import org.beangle.ems.app.datasource.AppDataSourceFactory
 import org.springframework.beans.factory.config.PropertiesFactoryBean
 import org.springframework.transaction.interceptor.TransactionProxyFactoryBean
@@ -32,9 +32,6 @@ object DaoModule extends BindModule {
   protected override def binding(): Unit = {
     bind(classOf[AppDataSourceFactory])
 
-    val hasEhcacheXml = ClassLoaders.getResources("ehcache.xml").nonEmpty
-    val ehcacheFileName = if (hasEhcacheXml) "ehcache.xml" else "ehcache-failsafe.xml"
-
     bind("HibernateConfig.default", classOf[PropertiesFactoryBean]).property(
       "properties",
       props(
@@ -43,8 +40,7 @@ object DaoModule extends BindModule {
         "hibernate.jdbc.batch_versioned_data=true", "hibernate.jdbc.use_streams_for_binary=true",
         "hibernate.jdbc.use_get_generated_keys=true",
         "hibernate.javax.cache.missing_cache_strategy=create",
-        "hibernate.javax.cache.provider=org.ehcache.jsr107.EhcacheCachingProvider",
-        "hibernate.javax.cache.uri=" + ehcacheFileName,
+        "hibernate.javax.cache.provider=com.github.benmanes.caffeine.jcache.spi.CaffeineCachingProvider",
         "hibernate.cache.use_second_level_cache=true", "hibernate.cache.use_query_cache=true",
         "hibernate.query.substitutions=true 1, false 0, yes 'Y', no 'N'", "hibernate.show_sql=" + devEnabled))
       .description("Hibernate配置信息").nowire("propertiesArray")

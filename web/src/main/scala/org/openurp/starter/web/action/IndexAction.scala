@@ -30,7 +30,7 @@ import org.beangle.webmvc.support.action.EntityAction
 import org.openurp.base.model.Project
 
 /**
- * @author xinzhou
+ * @author chaostone
  */
 @action("")
 class IndexAction extends ActionSupport, ServletSupport {
