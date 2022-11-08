@@ -84,9 +84,20 @@ abstract class StudentSupport extends ActionSupport with ServletSupport {
     if (null != std) std.asInstanceOf[Student]
     else
       val project = getProject()
-      val stds = entityDao.findBy(classOf[Student], "project" -> project, "code" -> Securities.user)
-      stds.foreach { std => request.setAttribute("std", std) }
-      stds.head
+      if project == null then
+        updateRequest(entityDao.findBy(classOf[Student], "code" -> Securities.user).headOption)
+      else
+        updateRequest(entityDao.findBy(classOf[Student], "project" -> project, "code" -> Securities.user).headOption)
+  }
+
+  private def updateRequest(stds: Option[Student]): Student = {
+    stds match {
+      case Some(std) =>
+        request.setAttribute("student", std)
+        request.setAttribute("project", std.project)
+        std
+      case None => null
+    }
   }
 
   private def toProject(student: Student): View = {
