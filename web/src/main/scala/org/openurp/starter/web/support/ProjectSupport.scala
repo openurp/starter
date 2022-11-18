@@ -117,14 +117,6 @@ trait ProjectSupport extends ParamSupport with ServletSupport {
     }
   }
 
-  protected def getUserProjects(clazz: Class[_]): Iterable[Project] = {
-    val builder = OqlBuilder.from[Project](clazz.getName, "s")
-    builder.where("s.user.code=:code", Securities.user)
-    builder.select("s.project")
-    builder.orderBy("s.project.code")
-    entityDao.search(builder)
-  }
-
   protected def getUser[A](clazz: Class[A]): A = {
     getInt("project.id") match {
       case None =>

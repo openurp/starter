@@ -20,10 +20,11 @@ package org.openurp.starter.web.support
 import org.beangle.data.dao.EntityDao
 import org.beangle.security.Securities
 import org.beangle.web.action.support.{ActionSupport, ServletSupport}
-import org.beangle.web.action.view.View
+import org.beangle.web.action.view.{PathView, View}
 import org.openurp.base.model.{Project, Semester}
 import org.openurp.base.service.{ProjectPropertyService, SemesterService}
 import org.openurp.base.std.model.Student
+import org.openurp.code.Code
 import org.openurp.code.service.CodeService
 
 import java.time.LocalDate
@@ -57,7 +58,9 @@ abstract class StudentSupport extends ActionSupport with ServletSupport {
       }
   }
 
-  protected def projectIndex(student: Student): Unit
+  protected def projectIndex(student: Student): View = {
+    null
+  }
 
   protected final def getSemester(): Semester = {
     getInt("semester.id") match {
@@ -103,8 +106,18 @@ abstract class StudentSupport extends ActionSupport with ServletSupport {
   private def toProject(student: Student): View = {
     request.setAttribute("student", student)
     request.setAttribute("project", student.project)
-    projectIndex(student)
-    forward("projectIndex")
+    projectIndex(student) match {
+      case null => forward("projectIndex")
+      case v@PathView(p) => if null == p then forward("projectIndex") else v
+      case r: View => r
+    }
   }
 
+  def getCodes[T <: Code](clazz: Class[T])(using project: Project): collection.Seq[T] = {
+    codeService.get(clazz)
+  }
+
+  def getProjectProperty[T](name: String, defaultValue: T)(using project: Project): T = {
+    projectPropertyService.get(project, name, defaultValue)
+  }
 }
