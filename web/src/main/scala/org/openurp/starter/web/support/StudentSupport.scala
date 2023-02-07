@@ -117,6 +117,10 @@ abstract class StudentSupport extends ActionSupport with ServletSupport {
     codeService.get(clazz)
   }
 
+  def getCode[T <: Code](clazz: Class[T], id: Int): T = {
+    codeService.get(clazz, id)
+  }
+
   def getProjectProperty[T](name: String, defaultValue: T)(using project: Project): T = {
     projectPropertyService.get(project, name, defaultValue)
   }

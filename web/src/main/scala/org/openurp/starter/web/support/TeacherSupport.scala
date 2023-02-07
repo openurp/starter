@@ -29,6 +29,7 @@ import org.openurp.code.Code
 import org.openurp.code.service.CodeService
 
 import java.time.LocalDate
+import scala.reflect.ClassTag
 
 abstract class TeacherSupport extends ActionSupport with ServletSupport {
 
@@ -111,6 +112,10 @@ abstract class TeacherSupport extends ActionSupport with ServletSupport {
 
   def getCodes[T <: Code](clazz: Class[T])(using project: Project): collection.Seq[T] = {
     codeService.get(clazz)
+  }
+
+  def getCode[T <: Code](clazz: Class[T], id: Int): T = {
+    codeService.get(clazz, id)
   }
 
   def getProjectProperty[T](name: String, defaultValue: T)(using project: Project): T = {

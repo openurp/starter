@@ -23,7 +23,7 @@ ThisBuild / developers := List(
 ThisBuild / description := "OpenURP Starter"
 ThisBuild / homepage := Some(url("http://openurp.github.io/starter/index.html"))
 
-val apiVersion="0.31.0.Beta1"
+val apiVersion="0.31.0.Beta2-SNAPSHOT"
 val openurp_base_api ="org.openurp.base" % "openurp-base-api" %apiVersion
 
 lazy val root = (project in file("."))
