@@ -20,10 +20,9 @@ package org.openurp.starter.ws
 import org.beangle.cache.concurrent.ConcurrentMapCacheManager
 import org.beangle.cdi.bind.BindModule
 import org.beangle.commons.lang.ClassLoaders
-import org.beangle.data.orm.hibernate.{DomainFactory, HibernateEntityDao}
-import org.beangle.data.orm.hibernate.spring.{HibernateTransactionManager, LocalSessionFactoryBean}
-import org.beangle.webmvc.hibernate.OpenSessionInViewInterceptor
+import org.beangle.data.orm.hibernate.{DomainFactory, HibernateEntityDao, HibernateTransactionManager, LocalSessionFactoryBean}
 import org.beangle.ems.app.datasource.AppDataSourceFactory
+import org.beangle.webmvc.hibernate.CloseSessionInterceptor
 import org.springframework.beans.factory.config.PropertiesFactoryBean
 import org.springframework.transaction.interceptor.TransactionProxyFactoryBean
 
@@ -32,22 +31,8 @@ object DaoModule extends BindModule {
   protected override def binding(): Unit = {
     bind(classOf[AppDataSourceFactory])
 
-    bind("HibernateConfig.default", classOf[PropertiesFactoryBean]).property(
-      "properties",
-      props(
-        "hibernate.max_fetch_depth=1", "hibernate.default_batch_fetch_size=500",
-        "hibernate.jdbc.fetch_size=500", "hibernate.jdbc.batch_size=20",
-        "hibernate.jdbc.batch_versioned_data=true", "hibernate.jdbc.use_streams_for_binary=true",
-        "hibernate.jdbc.use_get_generated_keys=true",
-        "hibernate.javax.cache.missing_cache_strategy=create",
-        "hibernate.javax.cache.provider=com.github.benmanes.caffeine.jcache.spi.CaffeineCachingProvider",
-        "hibernate.cache.use_second_level_cache=true", "hibernate.cache.use_query_cache=true",
-        "hibernate.query.substitutions=true 1, false 0, yes 'Y', no 'N'", "hibernate.show_sql=" + devEnabled))
-      .description("Hibernate配置信息").nowire("propertiesArray")
-
     bind("SessionFactory.default", classOf[LocalSessionFactoryBean])
-      .property("properties", ref("HibernateConfig.default"))
-      .property("configLocations", "classpath*:META-INF/hibernate.cfg.xml")
+      .property("devMode", devEnabled)
       .property("ormLocations", "classpath*:META-INF/beangle/orm.xml").primary()
 
     bind("HibernateTransactionManager.default", classOf[HibernateTransactionManager]).primary()
@@ -63,7 +48,7 @@ object DaoModule extends BindModule {
     bind("EntityDao.hibernate", classOf[TransactionProxyFactoryBean]).proxy("target", classOf[HibernateEntityDao])
       .parent("TransactionProxy.template").primary().description("基于Hibernate提供的通用DAO")
 
-    bind("web.Interceptor.hibernate", classOf[OpenSessionInViewInterceptor])
+    bind("web.Interceptor.hibernate", classOf[CloseSessionInterceptor])
 
     bind("CacheManager.concurrent", classOf[ConcurrentMapCacheManager])
   }

@@ -2,7 +2,7 @@ import org.openurp.parent.Settings._
 import org.openurp.parent.Dependencies._
 
 ThisBuild / organization := "org.openurp.starter"
-ThisBuild / version := "0.2.10-SNAPSHOT"
+ThisBuild / version := "0.2.10"
 
 ThisBuild / scmInfo := Some(
   ScmInfo(
@@ -23,7 +23,7 @@ ThisBuild / developers := List(
 ThisBuild / description := "OpenURP Starter"
 ThisBuild / homepage := Some(url("http://openurp.github.io/starter/index.html"))
 
-val apiVersion="0.31.0.Beta2-SNAPSHOT"
+val apiVersion="0.31.0.Beta2"
 val openurp_base_api ="org.openurp.base" % "openurp-base-api" %apiVersion
 
 lazy val root = (project in file("."))
