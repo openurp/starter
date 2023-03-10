@@ -19,6 +19,7 @@ package org.openurp.starter.web.support
 
 import org.beangle.data.dao.EntityDao
 import org.beangle.security.Securities
+import org.beangle.web.action.context.Params
 import org.beangle.web.action.support.{ActionSupport, ServletSupport}
 import org.beangle.web.action.view.{PathView, View}
 import org.openurp.base.edu.model.Teacher
@@ -50,7 +51,7 @@ abstract class TeacherSupport extends ActionSupport with ServletSupport {
 
         toProject(teacher)
       } else {
-        getIntId("project") match {
+        Params.getId("project", classOf[Int]) match {
           case None =>
             request.setAttribute("defaultProjectId", teacher.projects.head.id)
             forward()
@@ -71,7 +72,7 @@ abstract class TeacherSupport extends ActionSupport with ServletSupport {
   }
 
   protected final def getSemester(): Semester = {
-    getIntId("semester") match {
+    Params.getId("semester", classOf[Int]) match {
       case None => semesterService.get(getProject(), LocalDate.now)
       case Some(id) => entityDao.get(classOf[Semester], id)
     }
@@ -81,7 +82,7 @@ abstract class TeacherSupport extends ActionSupport with ServletSupport {
     val project = request.getAttribute("project")
     if (null != project) project.asInstanceOf[Project]
     else
-      getIntId("project") match {
+      Params.getId("project", classOf[Int]) match {
         case Some(projectId) =>
           val project = entityDao.get(classOf[Project], projectId)
           request.setAttribute("project", project)
@@ -122,9 +123,4 @@ abstract class TeacherSupport extends ActionSupport with ServletSupport {
     projectPropertyService.get(project, name, defaultValue)
   }
 
-  private def getIntId(shortName: String): Option[Int] = {
-    var entityId = getInt(s"${shortName}Id")
-    if (entityId == None) entityId = getInt(s"${shortName}.id")
-    entityId
-  }
 }
