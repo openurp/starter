@@ -22,10 +22,12 @@ import org.beangle.ems.app.{Ems, EmsApp}
 import org.beangle.security.Securities
 import org.beangle.security.realm.cas.{Cas, CasConfig}
 import org.beangle.security.session.cache.CacheSessionRepo
+import org.beangle.web.action.ToURL
 import org.beangle.web.action.annotation.action
 import org.beangle.web.action.context.ActionContext
 import org.beangle.web.action.support.{ActionSupport, ServletSupport}
-import org.beangle.web.action.view.View
+import org.beangle.web.action.view.{Status, View}
+import org.beangle.web.servlet.url.UrlBuilder
 import org.beangle.webmvc.support.action.EntityAction
 import org.openurp.base.model.Project
 
@@ -46,7 +48,7 @@ class IndexAction extends ActionSupport, ServletSupport {
   }
 
   def welcome(): View = {
-    redirect(to(Ems.portal + "/index/appNotice?app=" + EmsApp.name),"")
+    redirect(to(Ems.portal + "/index/appNotice?app=" + EmsApp.name), "")
   }
 
   def logout(): View = {
@@ -54,5 +56,21 @@ class IndexAction extends ActionSupport, ServletSupport {
       sessionRepo.evict(s.id)
     }
     redirect(to(Cas.cleanup(casConfig, ActionContext.current.request, ActionContext.current.response)), null)
+  }
+
+  def redirect(): View = {
+    get("url") match
+      case Some(url) =>
+        get("target") match
+          case Some(target) =>
+            put("url", url)
+            put("target", target)
+            forward()
+          case _ =>
+            val builder = UrlBuilder(ActionContext.current.request)
+            builder.setRequestURI(url)
+            builder.setContextPath("").setPathInfo(null).setQueryString(null)
+            redirect(to(builder.buildUrl()), "")
+      case None => Status.NotFound
   }
 }

@@ -32,7 +32,7 @@ import org.openurp.code.service.CodeService
 import java.time.LocalDate
 import scala.reflect.ClassTag
 
-abstract class TeacherSupport extends ActionSupport with ServletSupport {
+abstract class TeacherSupport extends ActionSupport, ServletSupport {
 
   var entityDao: EntityDao = _
   var codeService: CodeService = _
@@ -40,7 +40,7 @@ abstract class TeacherSupport extends ActionSupport with ServletSupport {
   var projectPropertyService: ProjectPropertyService = _
 
   def index(): View = {
-    val teacher = getTeacher()
+    val teacher = getTeacher
     if (null == teacher) {
       forward("not-teacher")
     } else {
@@ -71,14 +71,14 @@ abstract class TeacherSupport extends ActionSupport with ServletSupport {
     null
   }
 
-  protected final def getSemester(): Semester = {
+  protected final def getSemester: Semester = {
     Params.getId("semester", classOf[Int]) match {
-      case None => semesterService.get(getProject(), LocalDate.now)
+      case None => semesterService.get(getProject, LocalDate.now)
       case Some(id) => entityDao.get(classOf[Semester], id)
     }
   }
 
-  protected final def getProject(): Project = {
+  protected final def getProject: Project = {
     val project = request.getAttribute("project")
     if (null != project) project.asInstanceOf[Project]
     else
@@ -91,7 +91,7 @@ abstract class TeacherSupport extends ActionSupport with ServletSupport {
       }
   }
 
-  protected final def getTeacher(): Teacher = {
+  protected final def getTeacher: Teacher = {
     val teacher = request.getAttribute("teacher")
     if (null != teacher) teacher.asInstanceOf[Teacher]
     else {

@@ -29,7 +29,7 @@ import org.openurp.code.service.CodeService
 
 import java.time.LocalDate
 
-abstract class StudentSupport extends ActionSupport with ServletSupport {
+abstract class StudentSupport extends ActionSupport, ServletSupport {
 
   var entityDao: EntityDao = _
 
@@ -62,14 +62,14 @@ abstract class StudentSupport extends ActionSupport with ServletSupport {
     null
   }
 
-  protected final def getSemester(): Semester = {
+  protected final def getSemester: Semester = {
     getInt("semester.id") match {
-      case None => semesterService.get(getProject(), LocalDate.now)
+      case None => semesterService.get(getProject, LocalDate.now)
       case Some(id) => entityDao.get(classOf[Semester], id)
     }
   }
 
-  protected final def getProject(): Project = {
+  protected final def getProject: Project = {
     val project = request.getAttribute("project")
     if (null != project) project.asInstanceOf[Project]
     else
@@ -82,11 +82,11 @@ abstract class StudentSupport extends ActionSupport with ServletSupport {
       }
   }
 
-  protected final def getStudent(): Student = {
+  protected final def getStudent: Student = {
     val std = request.getAttribute("student")
     if (null != std) std.asInstanceOf[Student]
     else
-      val project = getProject()
+      val project = getProject
       if project == null then
         updateRequest(entityDao.findBy(classOf[Student], "code" -> Securities.user).headOption)
       else
