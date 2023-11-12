@@ -3,6 +3,7 @@
   <container>
     <module class="org.beangle.ems.app.cas.DefaultModule"/>
     <module class="org.beangle.ems.app.log.DefaultModule"/>
+    <module class="org.beangle.ems.app.config.DefaultModule"/>
     <module class="org.beangle.ems.app.web.DefaultModule"/>
     <module class="org.beangle.ems.app.web.WebReconfigModule"/>
 
