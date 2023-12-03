@@ -25,7 +25,7 @@ import org.beangle.security.authc.Profile
 import org.beangle.web.action.annotation.ignore
 import org.beangle.web.action.support.{ParamSupport, ServletSupport}
 import org.openurp.base.model.{Department, Project, Semester}
-import org.openurp.base.service.{ProjectPropertyService, SemesterService}
+import org.openurp.base.service.{Feature, ProjectConfigService, SemesterService}
 import org.openurp.code.Code
 import org.openurp.code.service.CodeService
 import org.openurp.starter.web.helper.EmsCookieHelper
@@ -38,12 +38,16 @@ trait ProjectSupport extends ParamSupport with ServletSupport {
 
   var codeService: CodeService = _
 
-  var projectPropertyService: ProjectPropertyService = _
+  var configService: ProjectConfigService = _
 
   var semesterService: SemesterService = _
 
-  def getProjectProperty[T](name: String, defaultValue: T)(using project: Project): T = {
-    projectPropertyService.get(project, name, defaultValue)
+  protected def getConfig[T](name: String, defaultValue: T)(using project: Project): T = {
+    configService.get(project, name, defaultValue)
+  }
+
+  protected def getConfig(f: Feature)(using project: Project): Any = {
+    configService.get[Any](project, f)
   }
 
   def getCodes[T <: Code](clazz: Class[T])(using project: Project): collection.Seq[T] = {

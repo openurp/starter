@@ -23,20 +23,19 @@ import org.beangle.web.action.context.Params
 import org.beangle.web.action.support.{ActionSupport, ServletSupport}
 import org.beangle.web.action.view.{PathView, View}
 import org.openurp.base.model.{Project, Semester}
-import org.openurp.base.service.{ProjectPropertyService, SemesterService}
-import org.openurp.base.std.model.{Mentor, Student}
+import org.openurp.base.service.{Feature, ProjectConfigService, SemesterService}
+import org.openurp.base.std.model.Mentor
 import org.openurp.code.Code
 import org.openurp.code.service.CodeService
 
 import java.time.LocalDate
-import scala.reflect.ClassTag
 
 abstract class MentorSupport extends ActionSupport, ServletSupport {
 
   var entityDao: EntityDao = _
   var codeService: CodeService = _
   var semesterService: SemesterService = _
-  var projectPropertyService: ProjectPropertyService = _
+  var configService: ProjectConfigService = _
 
   def index(): View = {
     val mentor = getMentor
@@ -47,6 +46,7 @@ abstract class MentorSupport extends ActionSupport, ServletSupport {
         forward("empty-project")
       } else if (mentor.projects.size == 1) {
         given project: Project = mentor.projects.head
+
         toProject(mentor)
       } else {
         Params.getId("project", classOf[Int]) match {
@@ -117,8 +117,12 @@ abstract class MentorSupport extends ActionSupport, ServletSupport {
     codeService.get(clazz, id)
   }
 
-  def getProjectProperty[T](name: String, defaultValue: T)(using project: Project): T = {
-    projectPropertyService.get(project, name, defaultValue)
+  protected def getConfig[T](name: String, defaultValue: T)(using project: Project): T = {
+    configService.get(project, name, defaultValue)
+  }
+
+  protected def getConfig(f: Feature)(using project: Project): Any = {
+    configService.get[Any](project, f)
   }
 
 }

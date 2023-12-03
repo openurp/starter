@@ -22,7 +22,7 @@ import org.beangle.security.Securities
 import org.beangle.web.action.support.{ActionSupport, ServletSupport}
 import org.beangle.web.action.view.{PathView, View}
 import org.openurp.base.model.{Project, Semester}
-import org.openurp.base.service.{ProjectPropertyService, SemesterService}
+import org.openurp.base.service.{Feature, ProjectConfigService, SemesterService}
 import org.openurp.base.std.model.Student
 import org.openurp.code.Code
 import org.openurp.code.service.CodeService
@@ -37,25 +37,20 @@ abstract class StudentSupport extends ActionSupport, ServletSupport {
 
   var codeService: CodeService = _
 
-  var projectPropertyService: ProjectPropertyService = _
+  var configService: ProjectConfigService = _
 
-  def index(): View = {
+  final def index(): View = {
     val stds = entityDao.findBy(classOf[Student], "code" -> Securities.user)
-    if stds.isEmpty then forward("not-student")
-    else if stds.size == 1 then
-      toProject(stds.head)
+    if stds.isEmpty then
+      forward("not-student")
     else
-      getInt("projectId") match {
-        case None =>
-          val projects = stds.map(_.project)
-          put("projects", projects)
-          request.setAttribute("defaultProjectId", projects.head.id)
-          forward()
-        case Some(pid) =>
-          stds.find(_.project.id == pid) match
-            case Some(s) => toProject(s)
-            case None => forward()
-      }
+      val projects = stds.map(_.project).sortBy(_.code)
+      val projectId = getInt("projectId", projects.head.id)
+      val student = stds.find(_.project.id == projectId).getOrElse(stds.head)
+      put("projects", projects)
+      put("student", student)
+      put("project", student.project)
+      projectIndex(student)
   }
 
   protected def projectIndex(student: Student): View = {
@@ -103,16 +98,6 @@ abstract class StudentSupport extends ActionSupport, ServletSupport {
     }
   }
 
-  private def toProject(student: Student): View = {
-    request.setAttribute("student", student)
-    request.setAttribute("project", student.project)
-    projectIndex(student) match {
-      case null => forward("projectIndex")
-      case v@PathView(p) => if null == p then forward("projectIndex") else v
-      case r: View => r
-    }
-  }
-
   def getCodes[T <: Code](clazz: Class[T])(using project: Project): collection.Seq[T] = {
     codeService.get(clazz)
   }
@@ -121,7 +106,11 @@ abstract class StudentSupport extends ActionSupport, ServletSupport {
     codeService.get(clazz, id)
   }
 
-  def getProjectProperty[T](name: String, defaultValue: T)(using project: Project): T = {
-    projectPropertyService.get(project, name, defaultValue)
+  protected def getConfig[T](name: String, defaultValue: T)(using project: Project): T = {
+    configService.get(project, name, defaultValue)
+  }
+
+  protected  def getConfig(f: Feature)(using project: Project): Any = {
+    configService.get[Any](project, f)
   }
 }

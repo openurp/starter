@@ -21,49 +21,39 @@ import org.beangle.data.dao.EntityDao
 import org.beangle.security.Securities
 import org.beangle.web.action.context.Params
 import org.beangle.web.action.support.{ActionSupport, ServletSupport}
-import org.beangle.web.action.view.{PathView, View}
+import org.beangle.web.action.view.View
 import org.openurp.base.edu.model.Teacher
 import org.openurp.base.model.{Project, Semester}
-import org.openurp.base.service.{ProjectPropertyService, SemesterService}
-import org.openurp.base.std.model.Student
+import org.openurp.base.service.{Feature, ProjectConfigService, SemesterService}
 import org.openurp.code.Code
 import org.openurp.code.service.CodeService
 
 import java.time.LocalDate
-import scala.reflect.ClassTag
 
 abstract class TeacherSupport extends ActionSupport, ServletSupport {
 
   var entityDao: EntityDao = _
   var codeService: CodeService = _
   var semesterService: SemesterService = _
-  var projectPropertyService: ProjectPropertyService = _
+  var configService: ProjectConfigService = _
 
   def index(): View = {
     val teacher = getTeacher
     if (null == teacher) {
       forward("not-teacher")
     } else {
-      if (teacher.projects.isEmpty) {
+      if teacher.projects.isEmpty then
         forward("empty-project")
-      } else if (teacher.projects.size == 1) {
-        given project: Project = teacher.projects.head
+      else
+        val projects = teacher.projects.toList.sortBy(_.code)
+        val projectId = getInt("projectId", projects.head.id)
 
-        toProject(teacher)
-      } else {
-        Params.getId("project", classOf[Int]) match {
-          case None =>
-            request.setAttribute("defaultProjectId", teacher.projects.head.id)
-            forward()
-          case Some(pid) =>
-            teacher.projects.find(_.id == pid) match
-              case Some(p) =>
-                given project: Project = p
+        given project: Project = teacher.projects.find(_.id == projectId).getOrElse(projects.head)
 
-                toProject(teacher)
-              case None => forward()
-        }
-      }
+        put("projects", projects)
+        put("project", project)
+        put("teacher", teacher)
+        projectIndex(teacher)
     }
   }
 
@@ -101,16 +91,6 @@ abstract class TeacherSupport extends ActionSupport, ServletSupport {
     }
   }
 
-  private def toProject(teacher: Teacher)(using p: Project): View = {
-    request.setAttribute("project", p)
-    request.setAttribute("teacher", teacher)
-    projectIndex(teacher) match {
-      case null => forward("projectIndex")
-      case v@PathView(p) => if null == p then forward("projectIndex") else v
-      case r: View => r
-    }
-  }
-
   def getCodes[T <: Code](clazz: Class[T])(using project: Project): collection.Seq[T] = {
     codeService.get(clazz)
   }
@@ -119,8 +99,11 @@ abstract class TeacherSupport extends ActionSupport, ServletSupport {
     codeService.get(clazz, id)
   }
 
-  def getProjectProperty[T](name: String, defaultValue: T)(using project: Project): T = {
-    projectPropertyService.get(project, name, defaultValue)
+  protected def getConfig[T](name: String, defaultValue: T)(using project: Project): T = {
+    configService.get(project, name, defaultValue)
   }
 
+  protected def getConfig(f: Feature)(using project: Project): Any = {
+    configService.get[Any](project, f)
+  }
 }
