@@ -20,8 +20,8 @@ package org.openurp.starter.web.support
 import org.beangle.data.dao.EntityDao
 import org.beangle.security.Securities
 import org.beangle.web.action.support.{ActionSupport, ServletSupport}
-import org.beangle.web.action.view.{PathView, View}
-import org.openurp.base.model.{Project, Semester}
+import org.beangle.web.action.view.View
+import org.openurp.base.model.{Project, Semester, User}
 import org.openurp.base.service.{Feature, ProjectConfigService, SemesterService}
 import org.openurp.base.std.model.Student
 import org.openurp.code.Code
@@ -88,6 +88,10 @@ abstract class StudentSupport extends ActionSupport, ServletSupport {
         updateRequest(entityDao.findBy(classOf[Student], "project" -> project, "code" -> Securities.user).headOption)
   }
 
+  protected final def getUser: User = {
+    entityDao.findBy(classOf[User], "code" -> Securities.user).head
+  }
+
   private def updateRequest(stds: Option[Student]): Student = {
     stds match {
       case Some(std) =>
@@ -110,7 +114,7 @@ abstract class StudentSupport extends ActionSupport, ServletSupport {
     configService.get(project, name, defaultValue)
   }
 
-  protected  def getConfig(f: Feature)(using project: Project): Any = {
+  protected def getConfig(f: Feature)(using project: Project): Any = {
     configService.get[Any](project, f)
   }
 }

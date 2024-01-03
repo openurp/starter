@@ -22,9 +22,9 @@ import org.beangle.security.Securities
 import org.beangle.web.action.context.Params
 import org.beangle.web.action.support.{ActionSupport, ServletSupport}
 import org.beangle.web.action.view.{PathView, View}
-import org.openurp.base.model.{Project, Semester}
+import org.openurp.base.model.{Project, Semester, User}
 import org.openurp.base.service.{Feature, ProjectConfigService, SemesterService}
-import org.openurp.base.std.model.Mentor
+import org.openurp.base.hr.model.Mentor
 import org.openurp.code.Code
 import org.openurp.code.service.CodeService
 
@@ -97,6 +97,10 @@ abstract class MentorSupport extends ActionSupport, ServletSupport {
       mentors.foreach { t => request.setAttribute("mentor", t) }
       mentors.headOption.orNull
     }
+  }
+
+  protected final def getUser: User = {
+    entityDao.findBy(classOf[User], "code" -> Securities.user).head
   }
 
   private def toProject(mentor: Mentor)(using p: Project): View = {

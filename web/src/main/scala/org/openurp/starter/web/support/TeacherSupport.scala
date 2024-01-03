@@ -22,8 +22,8 @@ import org.beangle.security.Securities
 import org.beangle.web.action.context.Params
 import org.beangle.web.action.support.{ActionSupport, ServletSupport}
 import org.beangle.web.action.view.View
-import org.openurp.base.edu.model.Teacher
-import org.openurp.base.model.{Project, Semester}
+import org.openurp.base.hr.model.Teacher
+import org.openurp.base.model.{Project, Semester, User}
 import org.openurp.base.service.{Feature, ProjectConfigService, SemesterService}
 import org.openurp.code.Code
 import org.openurp.code.service.CodeService
@@ -89,6 +89,10 @@ abstract class TeacherSupport extends ActionSupport, ServletSupport {
       teachers.foreach { t => request.setAttribute("teacher", t) }
       teachers.headOption.orNull
     }
+  }
+
+  protected final def getUser: User = {
+    entityDao.findBy(classOf[User], "code" -> Securities.user).head
   }
 
   def getCodes[T <: Code](clazz: Class[T])(using project: Project): collection.Seq[T] = {
