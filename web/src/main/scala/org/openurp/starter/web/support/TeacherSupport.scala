@@ -28,8 +28,6 @@ import org.openurp.base.service.{Feature, ProjectConfigService, SemesterService}
 import org.openurp.code.Code
 import org.openurp.code.service.CodeService
 
-import java.time.LocalDate
-
 abstract class TeacherSupport extends ActionSupport, ServletSupport {
 
   var entityDao: EntityDao = _
@@ -62,10 +60,7 @@ abstract class TeacherSupport extends ActionSupport, ServletSupport {
   }
 
   protected final def getSemester: Semester = {
-    Params.getId("semester", classOf[Int]) match {
-      case None => semesterService.get(getProject, LocalDate.now)
-      case Some(id) => entityDao.get(classOf[Semester], id)
-    }
+    SemesterHelper.getSemester(entityDao, semesterService, getProject, request, response)
   }
 
   protected final def getProject: Project = {

@@ -27,8 +27,6 @@ import org.openurp.base.std.model.Student
 import org.openurp.code.Code
 import org.openurp.code.service.CodeService
 
-import java.time.LocalDate
-
 abstract class StudentSupport extends ActionSupport, ServletSupport {
 
   var entityDao: EntityDao = _
@@ -58,10 +56,7 @@ abstract class StudentSupport extends ActionSupport, ServletSupport {
   }
 
   protected final def getSemester: Semester = {
-    getInt("semester.id") match {
-      case None => semesterService.get(getProject, LocalDate.now)
-      case Some(id) => entityDao.get(classOf[Semester], id)
-    }
+    SemesterHelper.getSemester(entityDao, semesterService, getProject, request, response)
   }
 
   protected final def getProject: Project = {

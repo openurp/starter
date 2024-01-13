@@ -115,10 +115,7 @@ trait ProjectSupport extends ParamSupport with ServletSupport {
   }
 
   protected def getSemester(using project: Project): Semester = {
-    getInt("semester.id") match {
-      case None => semesterService.get(project, LocalDate.now)
-      case Some(id) => entityDao.get(classOf[Semester], id)
-    }
+    SemesterHelper.getSemester(entityDao, semesterService, project, request, response)
   }
 
   protected def getUser[A](clazz: Class[A]): A = {

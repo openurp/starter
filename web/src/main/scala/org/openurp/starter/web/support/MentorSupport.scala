@@ -70,10 +70,7 @@ abstract class MentorSupport extends ActionSupport, ServletSupport {
   }
 
   protected final def getSemester: Semester = {
-    Params.getId("semester", classOf[Int]) match {
-      case None => semesterService.get(getProject, LocalDate.now)
-      case Some(id) => entityDao.get(classOf[Semester], id)
-    }
+    SemesterHelper.getSemester(entityDao, semesterService, getProject, request, response)
   }
 
   protected final def getProject: Project = {
