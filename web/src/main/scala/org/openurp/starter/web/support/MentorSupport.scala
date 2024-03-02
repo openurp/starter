@@ -19,12 +19,13 @@ package org.openurp.starter.web.support
 
 import org.beangle.data.dao.EntityDao
 import org.beangle.security.Securities
+import org.beangle.web.action.annotation.response
 import org.beangle.web.action.context.Params
 import org.beangle.web.action.support.{ActionSupport, ServletSupport}
 import org.beangle.web.action.view.{PathView, View}
+import org.openurp.base.hr.model.Mentor
 import org.openurp.base.model.{Project, Semester, User}
 import org.openurp.base.service.{Feature, ProjectConfigService, SemesterService}
-import org.openurp.base.hr.model.Mentor
 import org.openurp.code.Code
 import org.openurp.code.service.CodeService
 
@@ -42,31 +43,23 @@ abstract class MentorSupport extends ActionSupport, ServletSupport {
     if (null == mentor) {
       forward("not-mentor")
     } else {
-      if (mentor.projects.isEmpty) {
+      if mentor.projects.isEmpty then
         forward("empty-project")
-      } else if (mentor.projects.size == 1) {
-        given project: Project = mentor.projects.head
+      else
+        val projects = mentor.projects.toList.sortBy(_.code)
+        val projectId = getInt("projectId", projects.head.id)
 
-        toProject(mentor)
-      } else {
-        Params.getId("project", classOf[Int]) match {
-          case None =>
-            request.setAttribute("defaultProjectId", mentor.projects.head.id)
-            forward()
-          case Some(pid) =>
-            mentor.projects.find(_.id == pid) match
-              case Some(p) =>
-                given project: Project = p
+        given project: Project = mentor.projects.find(_.id == projectId).getOrElse(projects.head)
 
-                toProject(mentor)
-              case None => forward()
-        }
-      }
+        put("projects", projects)
+        put("project", project)
+        put("mentor", mentor)
+        projectIndex(mentor)
     }
   }
 
   protected def projectIndex(mentor: Mentor)(using project: Project): View = {
-    null
+    forward()
   }
 
   protected final def getSemester: Semester = {
@@ -98,16 +91,6 @@ abstract class MentorSupport extends ActionSupport, ServletSupport {
 
   protected final def getUser: User = {
     entityDao.findBy(classOf[User], "code" -> Securities.user).head
-  }
-
-  private def toProject(mentor: Mentor)(using p: Project): View = {
-    request.setAttribute("project", p)
-    request.setAttribute("mentor", mentor)
-    projectIndex(mentor) match {
-      case null => forward("projectIndex")
-      case v@PathView(p) => if null == p then forward("projectIndex") else v
-      case r: View => r
-    }
   }
 
   def getCodes[T <: Code](clazz: Class[T])(using project: Project): collection.Seq[T] = {

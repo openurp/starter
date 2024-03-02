@@ -56,7 +56,7 @@ abstract class TeacherSupport extends ActionSupport, ServletSupport {
   }
 
   protected def projectIndex(teacher: Teacher)(using project: Project): View = {
-    null
+    forward()
   }
 
   protected final def getSemester: Semester = {
