@@ -6,8 +6,8 @@
     <module class="org.beangle.ems.app.config.DefaultModule"/>
     <module class="org.beangle.ems.app.web.DefaultModule"/>
     <module class="org.beangle.ems.app.web.WebReconfigModule"/>
-
-    <module class="org.openurp.starter.service.DaoModule" />
+    <module class="org.beangle.ems.app.datasource.DaoModule"/>
+    <module class="org.beangle.ems.app.cache.DefaultModule"/>
     <module class="org.openurp.starter.service.ServiceModule" />
   </container>
 </cdi>

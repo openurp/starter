@@ -4,6 +4,7 @@
     <module class="org.beangle.serializer.text.DefaultModule"/>
     <module class="org.beangle.serializer.json.DefaultModule"/>
     <module class="org.beangle.serializer.xml.DefaultModule"/>
-    <module class="org.openurp.starter.ws.DaoModule"/>
+    <module class="org.beangle.ems.app.datasource.DaoModule"/>
+    <module class="org.beangle.ems.app.cache.DefaultModule"/>
   </container>
 </cdi>
