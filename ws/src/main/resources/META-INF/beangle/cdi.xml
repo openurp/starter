@@ -6,5 +6,6 @@
     <module class="org.beangle.serializer.xml.DefaultModule"/>
     <module class="org.beangle.ems.app.datasource.DaoModule"/>
     <module class="org.beangle.ems.app.cache.DefaultModule"/>
+    <module class="org.beangle.ems.app.event.EventModule"/>
   </container>
 </cdi>
