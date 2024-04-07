@@ -73,7 +73,7 @@ trait ProjectSupport extends ParamSupport with ServletSupport {
     entityDao.search(query)
   }
 
-  protected def addDepart(query: OqlBuilder[_], departPath: String): Unit = {
+  protected def queryByDepart[T](query: OqlBuilder[T], departPath: String): OqlBuilder[T] = {
     getProfileDepartIds match {
       case None => query.where("1=2")
       case Some(d) =>
@@ -86,24 +86,37 @@ trait ProjectSupport extends ParamSupport with ServletSupport {
           }
         }
     }
+    query
   }
 
-  protected def getDeparts(using project: Project): List[Department] = {
+  protected def getDeparts(using project: Project): Seq[Department] = {
     getProfileDepartIds match {
       case None => List.empty
       case Some(d) =>
-        val departs =
-          if (d == Profile.AllValue) {
-            entityDao.getAll(classOf[Department])
-          } else {
-            entityDao.find(classOf[Department], Strings.splitToInt(d))
-          }
-        val pds = project.departments.toSet
+        val q = OqlBuilder.from(classOf[Department], "d")
+        q.where("d.school=:school", project.school)
+        q.cacheable()
+        val departs = entityDao.search(q)
+        val ids = if d == Profile.AllValue then Set.empty[Int] else Strings.splitToInt(d).toSet
         val now = LocalDate.now()
-        val rs = departs.filter { d =>
-          pds.contains(d) && (d.endOn.isEmpty || !d.endOn.get.isAfter(now))
+        val pds = project.departments.toSet
+        departs.filter { d =>
+          pds.contains(d) && (ids.isEmpty || ids.contains(d.id)) && (d.endOn.isEmpty || !d.endOn.get.isAfter(now))
         }
-        rs.toList
+    }
+  }
+
+  protected def getSchoolDeparts(using project: Project): Seq[Department] = {
+    getProfileDepartIds match {
+      case None => List.empty
+      case Some(d) =>
+        val q = OqlBuilder.from(classOf[Department], "d")
+        q.where("d.school=:school", project.school)
+        q.cacheable()
+        val departs = entityDao.search(q)
+        val ids = if d == Profile.AllValue then Set.empty[Int] else Strings.splitToInt(d).toSet
+        val now = LocalDate.now()
+        departs.filter { d => (ids.isEmpty || ids.contains(d.id)) && (d.endOn.isEmpty || !d.endOn.get.isAfter(now)) }
     }
   }
 

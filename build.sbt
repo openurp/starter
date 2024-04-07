@@ -1,8 +1,8 @@
-import org.openurp.parent.Settings._
-import org.openurp.parent.Dependencies._
+import org.openurp.parent.Dependencies.*
+import org.openurp.parent.Settings.*
 
 ThisBuild / organization := "org.openurp.starter"
-ThisBuild / version := "0.3.28-SNAPSHOT"
+ThisBuild / version := "0.3.28"
 
 ThisBuild / scmInfo := Some(
   ScmInfo(
@@ -13,39 +13,43 @@ ThisBuild / scmInfo := Some(
 
 ThisBuild / developers := List(
   Developer(
-    id    = "chaostone",
-    name  = "Tihua Duan",
+    id = "chaostone",
+    name = "Tihua Duan",
     email = "duantihua@gmail.com",
-    url   = url("http://github.com/duantihua")
+    url = url("http://github.com/duantihua")
   )
 )
 
 ThisBuild / description := "OpenURP Starter"
 ThisBuild / homepage := Some(url("http://openurp.github.io/starter/index.html"))
 
-val apiVersion="0.37.3"
-val openurp_base_api ="org.openurp.base" % "openurp-base-api" %apiVersion
+val apiVersion = "0.38.0"
+val openurp_base_api = "org.openurp.base" % "openurp-base-api" % apiVersion
 
 lazy val root = (project in file("."))
   .settings()
-  .aggregate(web,ws)
+  .aggregate(web, ws)
 
 lazy val web = (project in file("web"))
   .settings(
     name := "openurp-starter-web",
     common,
-    libraryDependencies ++= Seq(beangle_commons_core,beangle_ems_app,beangle_webmvc_view,beangle_webmvc_support,beangle_data_transfer),
-    libraryDependencies ++= Seq(openurp_base_api,beangle_data_orm,hibernate_core,hibernate_jcache,caffeine_jcache,beangle_cdi_api,beangle_cdi_spring),
-    libraryDependencies ++= Seq(logback_classic)
+    libraryDependencies ++= Seq(beangle_commons, beangle_ems_app, beangle_webmvc, beangle_serializer),
+    libraryDependencies ++= Seq(beangle_model, beangle_cdi, beangle_doc_transfer),
+    libraryDependencies ++= Seq(spring_context, spring_beans, spring_tx, spring_jdbc),
+    libraryDependencies ++= Seq(freemarker, hibernate_core, hibernate_jcache, caffeine_jcache),
+    libraryDependencies ++= Seq(logback_classic, protobuf, openurp_base_api)
   )
 
 lazy val ws = (project in file("ws"))
   .settings(
     name := "openurp-starter-ws",
     common,
-    libraryDependencies ++= Seq(beangle_ems_app,beangle_webmvc_support,beangle_serializer_text,beangle_data_transfer),
-    libraryDependencies ++= Seq(openurp_base_api,beangle_data_orm,hibernate_core,hibernate_jcache,caffeine_jcache,beangle_cdi_api),
-    libraryDependencies ++= Seq(beangle_cdi_spring,logback_classic)
+    libraryDependencies ++= Seq(beangle_commons, beangle_ems_app, beangle_webmvc, beangle_serializer),
+    libraryDependencies ++= Seq(beangle_model, beangle_cdi),
+    libraryDependencies ++= Seq(spring_context, spring_beans, spring_tx, spring_jdbc),
+    libraryDependencies ++= Seq(openurp_base_api, hibernate_core, hibernate_jcache, caffeine_jcache),
+    libraryDependencies ++= Seq(logback_classic)
   )
 
 publish / skip := true
