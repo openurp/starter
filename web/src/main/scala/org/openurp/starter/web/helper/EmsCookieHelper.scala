@@ -112,8 +112,8 @@ class EmsCookieHelper(entityDao: EntityDao) {
       case Some(s) =>
         val account = s.principal.asInstanceOf[DefaultAccount]
         var profile: Profile = null
-        val cookie = EmsCookie.get(req, res)
         if (null != account.profiles && account.profiles.length > 0) {
+          val cookie = EmsCookie.get(req, res)
           if (cookie.profile == 0L) {
             profile = account.profiles(0)
           } else {

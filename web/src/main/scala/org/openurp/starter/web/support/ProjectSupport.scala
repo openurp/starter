@@ -21,11 +21,13 @@ import org.beangle.commons.lang.Strings
 import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.data.model.Entity
 import org.beangle.security.Securities
-import org.beangle.security.authc.Profile
+import org.beangle.security.authc.{DefaultAccount, Profile}
 import org.beangle.web.action.annotation.ignore
 import org.beangle.web.action.support.{ParamSupport, ServletSupport}
+import org.openurp.base.hr.model.Teacher
 import org.openurp.base.model.{Department, Project, Semester}
 import org.openurp.base.service.{Feature, ProjectConfigService, SemesterService}
+import org.openurp.base.std.model.Student
 import org.openurp.code.Code
 import org.openurp.code.service.CodeService
 import org.openurp.starter.web.helper.EmsCookieHelper
@@ -63,7 +65,32 @@ trait ProjectSupport extends ParamSupport with ServletSupport {
 
   @ignore
   protected final def getProject: Project = {
-    new EmsCookieHelper(entityDao).getProject(request, response)
+    Securities.session match
+      case Some(s) =>
+        val account = s.principal.asInstanceOf[DefaultAccount]
+        if (null != account.profiles && account.profiles.length > 0) {
+          new EmsCookieHelper(entityDao).getProject(request, response)
+        } else {
+          //没有数据权限则使用默认项目
+          val stds = entityDao.findBy(classOf[Student], "code" -> Securities.user)
+          if (stds.nonEmpty) {
+            stds.head.project
+          } else {
+            val teachers = entityDao.findBy(classOf[Teacher], "staff.code" -> Securities.user)
+            if (teachers.nonEmpty) {
+              if (teachers.head.projects.nonEmpty) {
+                teachers.head.projects.head
+              } else {
+                getFirstProject()
+              }
+            } else {
+              getFirstProject()
+            }
+          }
+        }
+      case None =>
+        getFirstProject()
+
   }
 
   protected def findInProject[T <: Entity[_]](clazz: Class[T], orderBy: String = "code")(using project: Project): Seq[T] = {
@@ -147,5 +174,12 @@ trait ProjectSupport extends ParamSupport with ServletSupport {
         builder.where("s.project.id=:projectId and s.code=:code", projectId, Securities.user)
         entityDao.search(builder).head
     }
+  }
+
+  private def getFirstProject(): Project = {
+    val query = OqlBuilder.from(classOf[Project], "p")
+    query.where("p.endOn is null or p.endOn > :today", LocalDate.now)
+    query.orderBy("p.code").cacheable()
+    entityDao.search(query).head
   }
 }
