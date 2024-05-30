@@ -38,10 +38,13 @@ abstract class StudentSupport extends ActionSupport, ServletSupport {
   var configService: ProjectConfigService = _
 
   final def index(): View = {
-    val stds = entityDao.findBy(classOf[Student], "code" -> Securities.user)
+    var stds = entityDao.findBy(classOf[Student], "code" -> Securities.user)
     if stds.isEmpty then
       forward("not-student")
     else
+      if (stds.size > 1) {
+        stds = stds.filter(_.project.active)
+      }
       val projects = stds.map(_.project).sortBy(_.code)
       val projectId = getInt("projectId", projects.head.id)
       val student = stds.find(_.project.id == projectId).getOrElse(stds.head)
