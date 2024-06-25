@@ -9,6 +9,10 @@
     <module class="org.beangle.ems.app.datasource.DaoModule"/>
     <module class="org.beangle.ems.app.cache.DefaultModule"/>
     <module class="org.beangle.ems.app.event.EventModule"/>
+
+    <module class="org.beangle.serializer.text.DefaultModule"/>
+    <module class="org.beangle.serializer.json.DefaultModule"/>
+
     <module class="org.openurp.starter.service.ServiceModule" />
     <module class="org.beangle.webmvc.view.freemarker.DefaultModule"/>
     <module class="org.beangle.webmvc.inspect.DefaultModule"/>
