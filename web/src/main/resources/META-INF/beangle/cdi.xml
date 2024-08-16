@@ -1,12 +1,13 @@
 <?xml version="1.0"?>
 <cdi>
   <container>
+    <module class="org.beangle.ems.app.dao.DaoModule"/>
+    <module class="org.beangle.ems.app.web.HibernateModule"/>
     <module class="org.beangle.ems.app.cas.DefaultModule"/>
     <module class="org.beangle.ems.app.log.DefaultModule"/>
     <module class="org.beangle.ems.app.config.DefaultModule"/>
     <module class="org.beangle.ems.app.web.DefaultModule"/>
     <module class="org.beangle.ems.app.web.WebReconfigModule"/>
-    <module class="org.beangle.ems.app.datasource.DaoModule"/>
     <module class="org.beangle.ems.app.cache.DefaultModule"/>
     <module class="org.beangle.ems.app.event.EventModule"/>
 

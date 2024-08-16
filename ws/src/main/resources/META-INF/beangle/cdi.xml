@@ -4,7 +4,8 @@
     <module class="org.beangle.serializer.text.DefaultModule"/>
     <module class="org.beangle.serializer.json.DefaultModule"/>
     <module class="org.beangle.serializer.xml.DefaultModule"/>
-    <module class="org.beangle.ems.app.datasource.DaoModule"/>
+    <module class="org.beangle.ems.app.dao.DaoModule"/>
+    <module class="org.beangle.ems.app.web.HibernateModule"/>
     <module class="org.beangle.ems.app.cache.DefaultModule"/>
     <module class="org.beangle.ems.app.event.EventModule"/>
   </container>
