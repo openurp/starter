@@ -38,17 +38,13 @@ abstract class StudentSupport extends ActionSupport, ServletSupport {
   var configService: ProjectConfigService = _
 
   final def index(): View = {
-    var stds = entityDao.findBy(classOf[Student], "code" -> Securities.user)
+    var stds = getStudents
     if stds.isEmpty then
       forward("not-student")
     else
-      if (stds.size > 1) {
-        stds = stds.filter(_.project.active)
-      }
-      val projects = stds.map(_.project).sortBy(_.code)
-      val projectId = getInt("projectId", projects.head.id)
-      val student = stds.find(_.project.id == projectId).getOrElse(stds.head)
-      put("projects", projects)
+      val stdId = getLong("studentId").getOrElse(stds.head.id)
+      val student = stds.find(_.id == stdId).getOrElse(stds.head)
+      put("students", stds)
       put("student", student)
       put("project", student.project)
       projectIndex(student)
@@ -65,39 +61,34 @@ abstract class StudentSupport extends ActionSupport, ServletSupport {
   protected final def getProject: Project = {
     val project = request.getAttribute("project")
     if (null != project) project.asInstanceOf[Project]
-    else
-      getInt("projectId") match {
-        case Some(projectId) =>
-          val project = entityDao.get(classOf[Project], projectId)
-          request.setAttribute("project", project)
-          project
-        case None => null
-      }
+    else getStudent.project
+  }
+
+  protected  final def getStudents:Seq[Student]={
+    entityDao.findBy(classOf[User], "code" -> Securities.user).headOption match
+      case None=> List.empty
+      case Some(user)=>
+        var stds = entityDao.findBy(classOf[Student], "user" -> user)
+        if (stds.size > 1) {
+          stds = stds.sortBy(_.beginOn).reverse
+        }
+        stds
   }
 
   protected final def getStudent: Student = {
     val std = request.getAttribute("student")
     if (null != std) std.asInstanceOf[Student]
     else
-      val project = getProject
-      if project == null then
-        updateRequest(entityDao.findBy(classOf[Student], "code" -> Securities.user).headOption)
-      else
-        updateRequest(entityDao.findBy(classOf[Student], "project" -> project, "code" -> Securities.user).headOption)
+      val stds = getStudents
+      val stdId = getLong("studentId").getOrElse(stds.head.id)
+      val student = stds.find(_.id == stdId).getOrElse(stds.head)
+      request.setAttribute("student", student)
+      request.setAttribute("project", student.project)
+      student
   }
 
   protected final def getUser: User = {
     entityDao.findBy(classOf[User], "code" -> Securities.user).head
-  }
-
-  private def updateRequest(stds: Option[Student]): Student = {
-    stds match {
-      case Some(std) =>
-        request.setAttribute("student", std)
-        request.setAttribute("project", std.project)
-        std
-      case None => null
-    }
   }
 
   def getCodes[T <: Code](clazz: Class[T])(using project: Project): collection.Seq[T] = {
