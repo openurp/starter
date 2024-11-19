@@ -17,7 +17,7 @@
 
 package org.openurp.starter.web
 
-import org.beangle.cdi.bind.BindModule
+import org.beangle.commons.cdi.BindModule
 import org.openurp.starter.web.action.IndexAction
 
 class ProjectModule extends BindModule {

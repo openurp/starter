@@ -19,9 +19,9 @@ package org.openurp.starter.web.support
 
 import org.beangle.data.dao.EntityDao
 import org.beangle.security.Securities
-import org.beangle.web.action.context.Params
-import org.beangle.web.action.support.{ActionSupport, ServletSupport}
-import org.beangle.web.action.view.View
+import org.beangle.webmvc.context.Params
+import org.beangle.webmvc.support.{ActionSupport, ServletSupport}
+import org.beangle.webmvc.view.View
 import org.openurp.base.hr.model.Teacher
 import org.openurp.base.model.{Project, Semester, User}
 import org.openurp.base.service.{Feature, ProjectConfigService, SemesterService}

@@ -22,11 +22,11 @@ import org.beangle.ems.app.{Ems, EmsApp}
 import org.beangle.security.Securities
 import org.beangle.security.realm.cas.{Cas, CasConfig}
 import org.beangle.security.session.cache.CacheSessionRepo
-import org.beangle.web.action.ToURL
-import org.beangle.web.action.annotation.action
-import org.beangle.web.action.context.ActionContext
-import org.beangle.web.action.support.{ActionSupport, ServletSupport}
-import org.beangle.web.action.view.{Status, View}
+import org.beangle.webmvc.ToURL
+import org.beangle.webmvc.annotation.action
+import org.beangle.webmvc.context.ActionContext
+import org.beangle.webmvc.support.{ActionSupport, ServletSupport}
+import org.beangle.webmvc.view.{Status, View}
 import org.beangle.web.servlet.url.UrlBuilder
 import org.beangle.webmvc.support.action.EntityAction
 import org.openurp.base.model.Project

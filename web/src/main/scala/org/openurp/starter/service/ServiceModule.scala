@@ -17,7 +17,7 @@
 
 package org.openurp.starter.service
 
-import org.beangle.cdi.bind.BindModule
+import org.beangle.commons.cdi.BindModule
 import org.openurp.base.edu.service.impl.TimeSettingServiceImpl
 import org.openurp.base.service.impl.{ProjectConfigServiceImpl, SemesterServiceImpl}
 import org.openurp.code.service.impl.CodeServiceImpl

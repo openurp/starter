@@ -20,7 +20,7 @@ package org.openurp.starter.web.support
 import jakarta.servlet.http.{HttpServletRequest, HttpServletResponse}
 import org.beangle.data.dao.EntityDao
 import org.beangle.ems.app.web.EmsCookie
-import org.beangle.web.action.context.Params
+import org.beangle.webmvc.context.Params
 import org.openurp.base.model.{Project, Semester}
 import org.openurp.base.service.SemesterService
 

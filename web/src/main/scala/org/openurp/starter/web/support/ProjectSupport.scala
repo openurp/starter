@@ -22,8 +22,8 @@ import org.beangle.data.dao.{EntityDao, OqlBuilder}
 import org.beangle.data.model.Entity
 import org.beangle.security.Securities
 import org.beangle.security.authc.{DefaultAccount, Profile}
-import org.beangle.web.action.annotation.ignore
-import org.beangle.web.action.support.{ParamSupport, ServletSupport}
+import org.beangle.webmvc.annotation.ignore
+import org.beangle.webmvc.support.{ParamSupport, ServletSupport}
 import org.openurp.base.hr.model.Teacher
 import org.openurp.base.model.{Department, Project, Semester}
 import org.openurp.base.service.{Feature, ProjectConfigService, SemesterService}
