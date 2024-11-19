@@ -16,6 +16,5 @@
 
     <module class="org.openurp.starter.service.ServiceModule" />
     <module class="org.beangle.webmvc.view.freemarker.DefaultModule"/>
-    <module class="org.beangle.webmvc.inspect.DefaultModule"/>
   </container>
 </cdi>

@@ -2,7 +2,7 @@ import org.openurp.parent.Dependencies.*
 import org.openurp.parent.Settings.*
 
 ThisBuild / organization := "org.openurp.starter"
-ThisBuild / version := "0.3.45-SNAPSHOT"
+ThisBuild / version := "0.3.45"
 
 ThisBuild / scmInfo := Some(
   ScmInfo(
@@ -23,10 +23,10 @@ ThisBuild / developers := List(
 ThisBuild / description := "OpenURP Starter"
 ThisBuild / homepage := Some(url("http://openurp.github.io/starter/index.html"))
 
-val apiVersion = "0.41.10"
+val apiVersion = "0.41.11"
 val openurp_base_api = "org.openurp.base" % "openurp-base-api" % apiVersion
-val ojdbc11 = "com.oracle.database.jdbc" % "ojdbc11" % "23.4.0.24.05"
-val orai18n = "com.oracle.database.nls" % "orai18n" % "23.4.0.24.05"
+val ojdbc11 = "com.oracle.database.jdbc" % "ojdbc11" % "23.6.0.24.10"
+val orai18n = "com.oracle.database.nls" % "orai18n" % "23.6.0.24.10"
 
 lazy val root = (project in file("."))
   .settings()
@@ -36,7 +36,7 @@ lazy val web = (project in file("web"))
   .settings(
     name := "openurp-starter-web",
     common,
-    libraryDependencies ++= Seq(beangle_commons, beangle_ems_app, beangle_webmvc, beangle_serializer),
+    libraryDependencies ++= Seq(beangle_commons, beangle_ems_app, beangle_bui_bootstrap, beangle_serializer),
     libraryDependencies ++= Seq(beangle_model, beangle_cdi, beangle_doc_transfer, beangle_template),
     libraryDependencies ++= Seq(spring_context, spring_beans, spring_tx, spring_jdbc),
     libraryDependencies ++= Seq(freemarker, hibernate_core, hibernate_jcache, caffeine_jcache),
