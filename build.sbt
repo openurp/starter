@@ -2,7 +2,7 @@ import org.openurp.parent.Dependencies.*
 import org.openurp.parent.Settings.*
 
 ThisBuild / organization := "org.openurp.starter"
-ThisBuild / version := "0.3.49-SNAPSHOT"
+ThisBuild / version := "0.3.49"
 
 ThisBuild / scmInfo := Some(
   ScmInfo(
@@ -37,7 +37,7 @@ lazy val web = (project in file("web"))
     name := "openurp-starter-web",
     common,
     libraryDependencies ++= Seq(beangle_commons, beangle_ems_app, beangle_bui_bootstrap, beangle_serializer),
-    libraryDependencies ++= Seq(beangle_model, beangle_cdi, beangle_doc_transfer, beangle_template),
+    libraryDependencies ++= Seq(beangle_model, beangle_cdi, beangle_webmvc, beangle_doc_transfer, beangle_template),
     libraryDependencies ++= Seq(spring_context, spring_beans, spring_tx, spring_jdbc),
     libraryDependencies ++= Seq(freemarker, hibernate_core, hibernate_jcache, caffeine_jcache),
     libraryDependencies ++= Seq(logback_classic, protobuf, openurp_base_api),
