@@ -64,12 +64,14 @@ abstract class StudentSupport extends ActionSupport, ServletSupport {
     else getStudent.project
   }
 
-  protected  final def getStudents:Seq[Student]={
+  protected final def getStudents: Seq[Student] = {
     entityDao.findBy(classOf[User], "code" -> Securities.user).headOption match
-      case None=> List.empty
-      case Some(user)=>
+      case None => List.empty
+      case Some(user) =>
         var stds = entityDao.findBy(classOf[Student], "user" -> user)
         if (stds.size > 1) {
+          val actives = stds.filter(_.project.active)
+          if actives.nonEmpty then stds = actives
           stds = stds.sortBy(_.beginOn).reverse
         }
         stds
@@ -80,8 +82,14 @@ abstract class StudentSupport extends ActionSupport, ServletSupport {
     if (null != std) std.asInstanceOf[Student]
     else
       val stds = getStudents
-      val stdId = getLong("studentId").getOrElse(stds.head.id)
-      val student = stds.find(_.id == stdId).getOrElse(stds.head)
+      if (stds.isEmpty) throw new RuntimeException(s"${Securities.user} is not a student")
+      val student = getLong("projectId") match {
+        case None =>
+          val stdId = getLong("studentId").getOrElse(stds.head.id)
+          stds.find(_.id == stdId).getOrElse(stds.head)
+        case Some(projectId) =>
+          stds.find(_.project.id == projectId).getOrElse(stds.head)
+      }
       request.setAttribute("student", student)
       request.setAttribute("project", student.project)
       student
