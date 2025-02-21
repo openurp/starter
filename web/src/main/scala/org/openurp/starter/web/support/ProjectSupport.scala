@@ -25,7 +25,7 @@ import org.beangle.security.authc.{DefaultAccount, Profile}
 import org.beangle.webmvc.annotation.ignore
 import org.beangle.webmvc.support.{ParamSupport, ServletSupport}
 import org.openurp.base.hr.model.Teacher
-import org.openurp.base.model.{Department, Project, Semester}
+import org.openurp.base.model.{Department, Project, Semester, User}
 import org.openurp.base.service.{Feature, ProjectConfigService, SemesterService}
 import org.openurp.base.std.model.Student
 import org.openurp.code.Code
@@ -158,7 +158,11 @@ trait ProjectSupport extends ParamSupport with ServletSupport {
     SemesterHelper.getSemester(entityDao, semesterService, project, request, response)
   }
 
-  protected def getUser[A](clazz: Class[A]): A = {
+  protected def getUser(using project: Project): User = {
+    entityDao.findBy(classOf[User], "code" -> Securities.user, "school" -> project.school).head
+  }
+
+  protected def getUserOf[A](clazz: Class[A]): A = {
     getInt("project.id") match {
       case None =>
         val builder = OqlBuilder.from(clazz, "s")
