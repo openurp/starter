@@ -116,6 +116,36 @@ trait ProjectSupport extends ParamSupport with ServletSupport {
     query
   }
 
+  protected def queryByDimension[T](query: OqlBuilder[T], departPath: String, stdTypePath: String): OqlBuilder[T] = {
+    if (Strings.isNotBlank(departPath)) {
+      getProfileDepartIds match {
+        case None => query.where("1=2")
+        case Some(d) =>
+          if (d != Profile.AllValue) {
+            val departIds = Strings.splitToInt(d)
+            if (departPath.endsWith(".id")) {
+              query.where(departPath + " in(:profile_depart_ids)", departIds)
+            } else {
+              query.where(departPath + ".id in(:profile_depart_ids)", departIds)
+            }
+          }
+      }
+    }
+    if (Strings.isNotBlank(stdTypePath)) {
+      getProfileStdTypeIds foreach { d =>
+        if (d != Profile.AllValue) {
+          val stdTypeIds = Strings.splitToInt(d)
+          if (stdTypePath.endsWith(".id")) {
+            query.where(stdTypePath + " in(:profile_stdtype_ids)", stdTypeIds)
+          } else {
+            query.where(stdTypePath + ".id in(:profile_stdtype_ids)", stdTypeIds)
+          }
+        }
+      }
+    }
+    query
+  }
+
   protected def getDeparts(using project: Project): Seq[Department] = {
     getProfileDepartIds match {
       case None => List.empty
@@ -151,6 +181,13 @@ trait ProjectSupport extends ParamSupport with ServletSupport {
     new EmsCookieHelper(entityDao).getProfile(request, response) match {
       case None => None
       case Some(p) => p.getProperty("department")
+    }
+  }
+
+  private def getProfileStdTypeIds: Option[String] = {
+    new EmsCookieHelper(entityDao).getProfile(request, response) match {
+      case None => None
+      case Some(p) => p.getProperty("stdType")
     }
   }
 
