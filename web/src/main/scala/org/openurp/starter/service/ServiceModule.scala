@@ -18,7 +18,7 @@
 package org.openurp.starter.service
 
 import org.beangle.commons.cdi.BindModule
-import org.openurp.base.edu.service.impl.TimeSettingServiceImpl
+import org.openurp.base.edu.service.impl.{CourseServiceImpl, TimeSettingServiceImpl}
 import org.openurp.base.service.impl.{ProjectConfigServiceImpl, SemesterServiceImpl}
 import org.openurp.code.service.impl.CodeServiceImpl
 
@@ -29,5 +29,6 @@ class ServiceModule extends BindModule {
     bind(classOf[SemesterServiceImpl])
     bind(classOf[ProjectConfigServiceImpl])
     bind(classOf[TimeSettingServiceImpl])
+    bind(classOf[CourseServiceImpl])
   }
 }
