@@ -2,7 +2,7 @@ import org.openurp.parent.Dependencies.*
 import org.openurp.parent.Settings.*
 
 ThisBuild / organization := "org.openurp.starter"
-ThisBuild / version := "0.3.58-SNAPSHOT"
+ThisBuild / version := "0.3.58"
 
 ThisBuild / scmInfo := Some(
   ScmInfo(
@@ -23,7 +23,7 @@ ThisBuild / developers := List(
 ThisBuild / description := "OpenURP Starter"
 ThisBuild / homepage := Some(url("http://openurp.github.io/starter/index.html"))
 
-val apiVersion = "0.43.0"
+val apiVersion = "0.44.0"
 val openurp_base_api = "org.openurp.base" % "openurp-base-api" % apiVersion
 val ojdbc11 = "com.oracle.database.jdbc" % "ojdbc11" % "23.8.0.25.04"
 val orai18n = "com.oracle.database.nls" % "orai18n" % "23.8.0.25.04"
