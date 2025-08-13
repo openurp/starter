@@ -2,7 +2,7 @@ import org.openurp.parent.Dependencies.*
 import org.openurp.parent.Settings.*
 
 ThisBuild / organization := "org.openurp.starter"
-ThisBuild / version := "0.3.60-SNAPSHOT"
+ThisBuild / version := "0.3.60"
 
 ThisBuild / scmInfo := Some(
   ScmInfo(
@@ -25,8 +25,8 @@ ThisBuild / homepage := Some(url("http://openurp.github.io/starter/index.html"))
 
 val apiVersion = "0.44.1"
 val openurp_base_api = "org.openurp.base" % "openurp-base-api" % apiVersion
-val ojdbc11 = "com.oracle.database.jdbc" % "ojdbc11" % "23.8.0.25.04"
-val orai18n = "com.oracle.database.nls" % "orai18n" % "23.8.0.25.04"
+val ojdbc11 = "com.oracle.database.jdbc" % "ojdbc11" % "23.9.0.25.07"
+val orai18n = "com.oracle.database.nls" % "orai18n" % "23.9.0.25.07"
 
 val commonLibs = Seq(beangle_commons, beangle_ems_app, beangle_model, beangle_cdi, beangle_jdbc, logback_classic,
   spring_context, spring_beans, spring_tx, spring_jdbc,
