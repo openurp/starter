@@ -2,7 +2,7 @@ import org.openurp.parent.Dependencies.*
 import org.openurp.parent.Settings.*
 
 ThisBuild / organization := "org.openurp.starter"
-ThisBuild / version := "0.4.4-SNAPSHOT"
+ThisBuild / version := "0.4.4"
 
 ThisBuild / scmInfo := Some(
   ScmInfo(
@@ -23,15 +23,14 @@ ThisBuild / developers := List(
 ThisBuild / description := "OpenURP Starter"
 ThisBuild / homepage := Some(url("http://openurp.github.io/starter/index.html"))
 
-val apiVersion = "0.48.0"
+val apiVersion = "0.48.1"
 val openurp_base_api = "org.openurp.base" % "openurp-base-api" % apiVersion
 val ojdbc11 = "com.oracle.database.jdbc" % "ojdbc11" % "23.9.0.25.07"
 val orai18n = "com.oracle.database.nls" % "orai18n" % "23.9.0.25.07"
 
-val commonLibs = Seq(beangle_commons, beangle_ems_app, beangle_model, beangle_cdi, beangle_jdbc, logback_classic,
-  spring_context, spring_beans, spring_tx, spring_jdbc,
-  hibernate_core, hibernate_jcache, caffeine_jcache,
-  ojdbc11, orai18n,
+val commonLibs = Seq(beangle_commons, beangle_ems_app, beangle_model, beangle_cdi, beangle_jdbc, beangle_config,
+  logback_classic, spring_context, spring_beans, spring_tx, spring_jdbc,
+  hibernate_core, hibernate_jcache, caffeine_jcache, ojdbc11, orai18n,
   openurp_base_api)
 
 lazy val root = (project in file("."))
