@@ -2,7 +2,7 @@ import org.openurp.parent.Dependencies.*
 import org.openurp.parent.Settings.*
 
 ThisBuild / organization := "org.openurp.starter"
-ThisBuild / version := "0.4.6"
+ThisBuild / version := "0.4.7-SNAPSHOT"
 
 ThisBuild / scmInfo := Some(
   ScmInfo(
