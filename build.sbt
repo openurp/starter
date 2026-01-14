@@ -43,7 +43,7 @@ lazy val web = (project in file("web"))
     common,
     libraryDependencies ++= commonLibs,
     libraryDependencies ++= Seq(beangle_bui_bootstrap),
-    libraryDependencies ++= Seq(beangle_webmvc, beangle_doc_transfer),
+    libraryDependencies ++= Seq(beangle_webmvc, beangle_transfer),
     libraryDependencies ++= Seq(freemarker, beangle_template),
     libraryDependencies ++= Seq(protobuf, beangle_serializer)
   )
