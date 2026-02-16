@@ -43,8 +43,8 @@ lazy val web = (project in file("web"))
     common,
     libraryDependencies ++= commonLibs,
     libraryDependencies ++= Seq(beangle_bui_bootstrap),
-    libraryDependencies ++= Seq(beangle_webmvc, beangle_transfer),
-    libraryDependencies ++= Seq(freemarker, beangle_template),
+    libraryDependencies ++= Seq(beangle_she, beangle_transfer),
+    libraryDependencies ++= Seq(freemarker),
     libraryDependencies ++= Seq(protobuf, beangle_serializer)
   )
 
@@ -53,7 +53,7 @@ lazy val ws = (project in file("ws"))
     name := "openurp-starter-ws",
     common,
     libraryDependencies ++= commonLibs,
-    libraryDependencies ++= Seq(beangle_webmvc, beangle_serializer)
+    libraryDependencies ++= Seq(beangle_she, beangle_serializer)
   )
 
 lazy val task = (project in file("task"))
