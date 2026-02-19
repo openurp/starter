@@ -2,7 +2,7 @@ import org.openurp.parent.Dependencies.*
 import org.openurp.parent.Settings.*
 
 ThisBuild / organization := "org.openurp.starter"
-ThisBuild / version := "0.4.17-SNAPSHOT"
+ThisBuild / version := "0.4.17"
 
 ThisBuild / scmInfo := Some(
   ScmInfo(
@@ -23,14 +23,13 @@ ThisBuild / developers := List(
 ThisBuild / description := "OpenURP Starter"
 ThisBuild / homepage := Some(url("http://openurp.github.io/starter/index.html"))
 
-val apiVersion = "0.49.4"
+val apiVersion = "0.49.6"
 val openurp_base_api = "org.openurp.base" % "openurp-base-api" % apiVersion
 val ojdbc11 = "com.oracle.database.jdbc" % "ojdbc11" % "23.26.1.0.0"
 val orai18n = "com.oracle.database.nls" % "orai18n" % "23.26.1.0.0"
 
-val commonLibs = Seq(beangle_commons, beangle_ems_app, beangle_model, beangle_cdi, beangle_jdbc, beangle_config,
-  logback_classic, spring_context, spring_beans, spring_tx, spring_jdbc,
-  hibernate_core, hibernate_jcache, caffeine_jcache, ojdbc11, orai18n,
+val commonLibs = Seq(beangle_commons, beangle_ems_app, beangle_data_hibernate, beangle_cdi, beangle_jdbc, beangle_config,
+  logback_classic, caffeine_jcache, ojdbc11, orai18n,
   openurp_base_api)
 
 lazy val root = (project in file("."))
@@ -44,8 +43,7 @@ lazy val web = (project in file("web"))
     libraryDependencies ++= commonLibs,
     libraryDependencies ++= Seq(beangle_bui_bootstrap),
     libraryDependencies ++= Seq(beangle_she, beangle_transfer),
-    libraryDependencies ++= Seq(freemarker),
-    libraryDependencies ++= Seq(protobuf, beangle_serializer)
+    libraryDependencies ++= Seq(protobuf, beangle_cron)
   )
 
 lazy val ws = (project in file("ws"))
@@ -53,7 +51,7 @@ lazy val ws = (project in file("ws"))
     name := "openurp-starter-ws",
     common,
     libraryDependencies ++= commonLibs,
-    libraryDependencies ++= Seq(beangle_she, beangle_serializer)
+    libraryDependencies ++= Seq(beangle_she, beangle_cron)
   )
 
 lazy val task = (project in file("task"))

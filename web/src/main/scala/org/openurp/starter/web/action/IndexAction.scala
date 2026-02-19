@@ -22,21 +22,17 @@ import org.beangle.ems.app.{Ems, EmsApp}
 import org.beangle.security.Securities
 import org.beangle.security.realm.cas.{Cas, CasConfig}
 import org.beangle.security.session.cache.CacheSessionRepo
-import org.beangle.webmvc.ToURL
+import org.beangle.web.servlet.url.UrlBuilder
 import org.beangle.webmvc.annotation.action
 import org.beangle.webmvc.context.ActionContext
 import org.beangle.webmvc.support.{ActionSupport, ServletSupport}
 import org.beangle.webmvc.view.{Status, View}
-import org.beangle.web.servlet.url.UrlBuilder
-import org.beangle.webmvc.support.action.EntityAction
-import org.openurp.base.model.Project
 
 /**
  * @author chaostone
  */
 @action("")
 class IndexAction extends ActionSupport, ServletSupport {
-
   var casConfig: CasConfig = _
   var sessionRepo: CacheSessionRepo = _
 
