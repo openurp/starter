@@ -36,11 +36,12 @@ class OrmModule extends BindModule {
     bind("HibernateTransactionManager.default", classOf[HibernateTransactionManager])
 
     //配置事务模板，不需要的方法不配置，例如find*
-    bind("TransactionProxy.template", classOf[TransactionProxyFactoryBean]).setAbstract().property(
-      "transactionAttributes",
-      props("save*=PROPAGATION_REQUIRED", "update*=PROPAGATION_REQUIRED", "delete*=PROPAGATION_REQUIRED",
-        "batch*=PROPAGATION_REQUIRED", "execute*=PROPAGATION_REQUIRED", "remove*=PROPAGATION_REQUIRED",
-        "create*=PROPAGATION_REQUIRED", "init*=PROPAGATION_REQUIRED", "authorize*=PROPAGATION_REQUIRED"))
+    bind("TransactionProxy.template", classOf[TransactionProxyFactoryBean]).setAbstract()
+      .property("transactionAttributes",
+        props("save*=PROPAGATION_REQUIRED", "update*=PROPAGATION_REQUIRED", "delete*=PROPAGATION_REQUIRED",
+          "batch*=PROPAGATION_REQUIRED", "execute*=PROPAGATION_REQUIRED", "remove*=PROPAGATION_REQUIRED",
+          "create*=PROPAGATION_REQUIRED", "init*=PROPAGATION_REQUIRED", "authorize*=PROPAGATION_REQUIRED"))
+      .property("transactionManager", ref("HibernateTransactionManager.default"))
 
     bind(classOf[DomainFactory]).constructor(list(ref("SessionFactory.default")))
 
