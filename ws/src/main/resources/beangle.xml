@@ -7,5 +7,6 @@
     <module class="org.beangle.she.hibernate.OrmModule"/>
     <module class="org.beangle.ems.app.cache.DefaultModule"/>
     <module class="org.beangle.ems.app.event.EventModule"/>
+    <module class="org.beangle.ems.app.web.DefaultModule"/>
   </cdi>
 </beangle>
