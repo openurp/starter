@@ -23,11 +23,10 @@ ThisBuild / developers := List(
 ThisBuild / description := "OpenURP Starter"
 ThisBuild / homepage := Some(url("http://openurp.github.io/starter/index.html"))
 
-val apiVersion = "0.49.7"
+val apiVersion = "0.49.8"
 val openurp_base_api = "org.openurp.base" % "openurp-base-api" % apiVersion
 val ojdbc11 = "com.oracle.database.jdbc" % "ojdbc11" % "23.26.1.0.0"
 val orai18n = "com.oracle.database.nls" % "orai18n" % "23.26.1.0.0"
-val beangle_commons = "org.beangle.commons" % "beangle-commons" % "6.0.11"
 
 val commonLibs = Seq(beangle_commons, beangle_ems_app, beangle_data_hibernate, beangle_cdi, beangle_jdbc, beangle_config,
   logback_classic, caffeine_jcache, ojdbc11, orai18n,
