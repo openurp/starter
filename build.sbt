@@ -23,7 +23,7 @@ ThisBuild / developers := List(
 ThisBuild / description := "OpenURP Starter"
 ThisBuild / homepage := Some(url("http://openurp.github.io/starter/index.html"))
 
-val apiVersion = "0.49.6"
+val apiVersion = "0.49.7"
 val openurp_base_api = "org.openurp.base" % "openurp-base-api" % apiVersion
 val ojdbc11 = "com.oracle.database.jdbc" % "ojdbc11" % "23.26.1.0.0"
 val orai18n = "com.oracle.database.nls" % "orai18n" % "23.26.1.0.0"
