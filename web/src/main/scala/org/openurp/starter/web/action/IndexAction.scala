@@ -44,7 +44,7 @@ class IndexAction extends ActionSupport, ServletSupport {
   }
 
   def welcome(): View = {
-    redirect(to(Ems.portal + "/index/appNotice?app=" + EmsApp.name), "")
+    redirect(to(Ems.portal + "/index/appNotice?app=" + EmsApp.name))
   }
 
   def logout(): View = {
