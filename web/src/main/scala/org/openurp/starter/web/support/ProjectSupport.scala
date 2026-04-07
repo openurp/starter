@@ -157,9 +157,10 @@ trait ProjectSupport extends ParamSupport with ServletSupport {
         val ids = if d == Profile.AllValue then Set.empty[Int] else Strings.splitToInt(d).toSet
         val now = LocalDate.now()
         val pds = project.departments.toSet
-        departs.filter { d =>
+        val filted = departs.filter { d =>
           pds.contains(d) && (ids.isEmpty || ids.contains(d.id)) && (d.endOn.isEmpty || !d.endOn.get.isAfter(now))
         }
+        filted.sortBy(_.indexno)
     }
   }
 
@@ -173,7 +174,8 @@ trait ProjectSupport extends ParamSupport with ServletSupport {
         val departs = entityDao.search(q)
         val ids = if d == Profile.AllValue then Set.empty[Int] else Strings.splitToInt(d).toSet
         val now = LocalDate.now()
-        departs.filter { d => (ids.isEmpty || ids.contains(d.id)) && (d.endOn.isEmpty || !d.endOn.get.isAfter(now)) }
+        val filted = departs.filter { d => (ids.isEmpty || ids.contains(d.id)) && (d.endOn.isEmpty || !d.endOn.get.isAfter(now)) }
+        filted.sortBy(_.indexno)
     }
   }
 
